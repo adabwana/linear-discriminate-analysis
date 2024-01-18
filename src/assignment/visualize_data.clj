@@ -18,21 +18,18 @@
       (-
         (apply min dist))))
 
-^{::clerk/viewer clerk/vl}
 (-> (ds/select-rows data #(= (:group %) "normal"))
     (hanami/histogram :x2 {:nbins 20}))
 
 (-> (:x2 (ds/select-rows data #(= (:group %) "normal")))
     dist-range)
 
-^{::clerk/viewer clerk/vl}
 (-> (ds/select-rows data #(= (:group %) "gamma"))
     (hanami/histogram :x2 {:nbins 20}))
 
 (-> (:x2 (ds/select-rows data #(= (:group %) "gamma")))
     dist-range)
 
-^{::clerk/viewer clerk/vl}
 (-> (ds/select-rows data #(= (:group %) "log-normal"))
     (hanami/histogram :x2 {:nbins 20}))
 
@@ -40,7 +37,6 @@
     dist-range)
 
 ;; Scatter plot
-^{::clerk/viewer clerk/vl}
 (-> data
     (hanami/plot ht/point-chart
                  {:X "x1" :Y "x2" :COLOR "group"}))

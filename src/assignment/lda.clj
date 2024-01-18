@@ -17,33 +17,37 @@
 
 ;; ## Build pipelines
 ;; ### Generalized
-(def pipeline-vanilla-fn
+(def pipeline-fn
   (ml/pipeline
     (mm/categorical->number [response])
     (mm/set-inference-target response)))
 
-(-> (pipeline-vanilla-fn {:metamorph/data data-subset :metamorph/mode :fit})
+(-> (pipeline-fn {:metamorph/data data-subset :metamorph/mode :fit})
     :metamorph/data)
 
 ;; ### Specified
 (ml/hyperparameters :smile.classification/linear-discriminant-analysis)
 ; No hyperparameters.
 
-(def lda-vanilla-pipe-fn
+(def lda-pipe-fn
   (ml/pipeline
-    pipeline-vanilla-fn
+    pipeline-fn
     {:metamorph/id :model}
     (mm/model {:model-type :smile.classification/linear-discriminant-analysis})))
 
-(:metamorph/data (ml/fit-pipe data-subset lda-vanilla-pipe-fn))
+(:metamorph/data (ml/fit-pipe data-subset lda-pipe-fn))
 
 ;; ## Partition data
 (def train-test
   (ds/split->seq data-subset :kfold {:ratio [0.8 0.2] :k 5}))
 
-(comment                                                    ;will not run. :message "invalid type. everything above is using a subset of data with two categories. i did this because i thought maybe smile's lda did not want to work with more than binary responses
+(comment
+  ;will not run. :message "invalid type". everything above is using a subset of data with two categories.
+  ; i did this because i thought maybe smile's lda does not work with more than multiclass responses.
+  ; also would prefer to use stats/cohens-kappa and/or f1 (is f1 applicable?).
+  ; thought ml/classification would be less like to throw error bc it's a part of ml/ library.
   (ml/evaluate-pipelines
-    lda-vanilla-pipe-fn
+    lda-pipe-fn
     train-test
     ml/classification-accuracy
     :accuracy
