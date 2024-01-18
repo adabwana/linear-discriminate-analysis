@@ -7,11 +7,9 @@
     [assignment.generate-data :refer [data]]))
 
 ;; # Visualize Data
-^{::clerk/visibility {:code :hide :result :hide}}
 (comment
   (clerk/serve! {:browse? true :watch-paths ["."]})
-  (clerk/show! "src/assignment/generate_data.clj")
-  (clay/start!))
+  (clerk/show! "src/assignment/generate_data.clj"))
 
 (defn dist-range [dist]
   (-> (apply max dist)
