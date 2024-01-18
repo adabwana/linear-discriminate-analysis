@@ -1,0 +1,8 @@
+.clerk
+.cpcache/
+.idea/
+.nrepl-port
+*.iml
+classes/
+docs/
+notebooks/
