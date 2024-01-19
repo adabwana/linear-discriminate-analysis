@@ -8,7 +8,7 @@
   (take len (dist/normal {:mu -4 :sd 4})))
 
 (defn make-normal-ds [len]
-  {:x1    (take len (dist/normal {:mu 1 :sd 2 :location 4}))
+  {:x1    (take len (dist/normal {:mu 1 :sd 2 :location 3}))
    :x2    (norm-dist len)
    :group (take len (repeat "normal"))})
 

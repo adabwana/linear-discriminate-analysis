@@ -2,18 +2,19 @@
   (:require
     [assignment.generate-data :refer [data]]
     [calc-metric.patch]
-    ;[fastmath.stats :as stats]
+    [fastmath.stats :as stats]
     [scicloj.ml.core :as ml]
     [scicloj.ml.dataset :as ds]
     [scicloj.ml.metamorph :as mm]))
 
 ;; # Linear Discriminate Analysis
-(def data-subset
-  (ds/select-rows data #(not= (:group %) "gamma")))
+(comment                                                    ;if testing binary response
+  (def data-subset
+    (ds/select-rows data #(not= (:group %) "gamma"))))
 
 (def response :group)
 (def regressors
-  (remove #{response} (ds/column-names data-subset)))
+  (remove #{response} (ds/column-names data)))
 
 ;; ## Build pipelines
 ;; ### Generalized
@@ -22,33 +23,82 @@
     (mm/categorical->number [response])
     (mm/set-inference-target response)))
 
-(-> (pipeline-fn {:metamorph/data data-subset :metamorph/mode :fit})
-    :metamorph/data)
+(def pipeline-std-fn
+  (ml/pipeline
+    (mm/std-scale regressors {})
+    (mm/categorical->number [response])
+    (mm/set-inference-target response)))
 
 ;; ### Specified
-(ml/hyperparameters :smile.classification/linear-discriminant-analysis)
+(ml/hyperparameters
+  :smile.classification/linear-discriminant-analysis)
 ; No hyperparameters.
 
-(def lda-pipe-fn
+(defn lda-piping-fn [pipeline]
   (ml/pipeline
-    pipeline-fn
+    pipeline
     {:metamorph/id :model}
-    (mm/model {:model-type :smile.classification/linear-discriminant-analysis})))
+    (mm/model
+      {:model-type :smile.classification/linear-discriminant-analysis})))
 
-(:metamorph/data (ml/fit-pipe data-subset lda-pipe-fn))
+(def lda-pipe-fn
+  (lda-piping-fn pipeline-fn))
+(def lda-std-pipe-fn
+  (lda-piping-fn pipeline-std-fn))
+
+(-> data
+    (ml/transform-pipe lda-std-pipe-fn (ml/fit-pipe data lda-std-pipe-fn))
+    :metamorph/data
+    :group)
 
 ;; ## Partition data
 (def train-test
-  (ds/split->seq data-subset :kfold {:ratio [0.8 0.2] :k 5}))
+  (ds/split->seq data :kfold {:ratio [0.8 0.2] :k 5}))
 
-(comment
-  ;will not run. :message "invalid type". everything above is using a subset of data with two categories.
-  ; i did this because i thought maybe smile's lda does not work with more than multiclass responses.
-  ; also would prefer to use stats/cohens-kappa and/or f1 (is f1 applicable?).
-  ; thought ml/classification would be less like to throw error bc it's a part of ml/ library.
+(def evaluate-pipes
   (ml/evaluate-pipelines
-    lda-pipe-fn
+    [lda-pipe-fn lda-std-pipe-fn]
     train-test
-    ml/classification-accuracy
+    stats/cohens-kappa
     :accuracy
-    {:return-best-pipeline-only false}))
+    {:other-metrices            [{:name :accuracy :metric-fn ml/classification-accuracy}
+                                 {:name :mathews-cor-coef :metric-fn stats/mcc}]
+     :return-best-pipeline-only false}))
+
+(def models
+  (->> evaluate-pipes
+       flatten
+       (map
+         #(hash-map :summary (ml/thaw-model (get-in % [:fit-ctx :model]))
+                    :fit-ctx (:fit-ctx %)
+                    :timing-fit (:timing-fit %)
+                    :metric ((comp :metric :test-transform) %)
+                    :other-metrices ((comp :other-metrices :test-transform) %)
+                    :params ((comp :options :model :fit-ctx) %)
+                    :pipe-fn (:pipe-fn %)))
+       (sort-by :metric)))
+
+(count models)
+(-> models first :other-metrices)
+(-> models second :other-metrices)
+
+(-> models first :fit-ctx second)
+
+(def predictions
+  (-> data
+      (ml/transform-pipe
+        lda-pipe-fn
+        (-> models first :fit-ctx))
+      :metamorph/data
+      :group
+      vec))
+
+(def actual
+  (-> data
+      (ml/fit-pipe lda-pipe-fn)
+      :metamorph/data
+      :group
+      vec))
+
+(ml/confusion-map->ds (ml/confusion-map predictions actual :none))
+(-> models second :fit-ctx :model :target-categorical-maps :group)
