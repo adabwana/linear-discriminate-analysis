@@ -11,13 +11,16 @@
     [scicloj.ml.dataset :as ds]
     [scicloj.ml.dataset :as ds]))
 
+;; # R Interop & Plot
+
 (require-r '[base :refer [summary]]
-           '[ggplot2 :refer [ggplot aes geom_point stat_contour geom_contour]])
+           '[ggplot2 :refer [ggplot aes geom_point
+                             geom_contour theme_bw]])
 
 (summary data)
 
-(def dat (for [x (range -8 13 0.1)
-               y (range -14 16 0.2)]
+(def dat (for [x (range -5 12 0.1)
+               y (range -14 20 0.2)]
            {:x1 x :x2 y :group nil}))
 
 (def contour-data
@@ -40,6 +43,7 @@
 (-> (ggplot :data data (aes :x 'x1 :y 'x2 :color 'group))
     (r+ (geom_point))
     (r+ (geom_contour :data lda-predict (aes :x 'x1 :y 'x2 :z 'group) :col "black"))
+    (r+ (theme_bw))
     plot->svg)
 
 (comment                                                    ;reverse process
@@ -62,4 +66,5 @@
   (def lda-predict
     (-> lda-pred-pre-transform
         (ds/add-or-replace-column
-          :group (map #(get lookup-table-invert %) (map int (:group lda-predict)))))))
+          :group (map #(get lookup-table-invert %)
+                      (map int (:group lda-predict)))))))

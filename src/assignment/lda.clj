@@ -1,6 +1,7 @@
 (ns assignment.lda
   (:require
     [assignment.generate-data :refer [data]]
+    [utils.helpful-extracts :refer [model->ds eval-maps]]
     [calc-metric.patch]
     [fastmath.stats :as stats]
     [scicloj.ml.core :as ml]
@@ -79,10 +80,20 @@
        (sort-by :metric)))
 
 (count models)
-(-> models first :other-metrices)
-(-> models second :other-metrices)
+(-> models first :metric)
+(-> models first :other-metrices
+    (->> (map #(select-keys % [:name :metric]))))
 
-(-> models first :fit-ctx second)
+(-> models second :metric)
+(-> models second :other-metrices
+    (->> (map #(select-keys % [:name :metric]))))
+
+(-> models first :fit-ctx second) ;look for :fit-ctx second has StdScaleTransform
+
+(-> (model->ds (eval-maps models 2))
+    (ds/rename-columns {:metric-1 :kappa ;TODO: extract from models
+                        :metric-2 :accuracy
+                        :metric-3 :mathews-cor-coef}))
 
 (def predictions
   (-> data
@@ -101,4 +112,6 @@
       vec))
 
 (ml/confusion-map->ds (ml/confusion-map predictions actual :none))
-(-> models second :fit-ctx :model :target-categorical-maps :group)
+
+(comment
+  (-> models second :fit-ctx :model :target-categorical-maps :group))
