@@ -7,46 +7,103 @@
     [scicloj.noj.v1.vis.hanami :as hanami]))
 
 ;; # Visualize Data
-(ds/head data)
+(-> data
+    ds/shuffle
+    (ds/head 7))
 
-(defn dist-range [dist]
-  (-> (apply max dist)
-      (-
-        (apply min dist))))
+(def cols-of-interest [:x1 :x2])
 
-(-> (ds/select-rows data #(= (:group %) "normal"))
-    (hanami/histogram :x2 {:nbins 20}))
+; ## Group: normal
+(def norm-dat
+  (-> data
+      (ds/select-rows #(= (:group %) "normal"))))
 
-(ds/info (ds/select-rows data #(= (:group %) "normal")))
+^kind/vega
+(let [dat (ds/rows norm-dat :as-maps)
+      column-names cols-of-interest]
+  {:data   {:values dat}
+   :repeat {:column column-names}
+   :spec   {:mark     "bar"
+            :encoding {:x     {:field {:repeat "column"}
+                               :bin   {:steps [1 3]} :type "quantitative"}
+                       :y     {:aggregate "count"}
+                       :color {:field :group}}}})
 
-(-> (:x2 (ds/select-rows data #(= (:group %) "normal")))
-    dist-range)
+(ds/info norm-dat)
 
-(-> (ds/select-rows data #(= (:group %) "gamma"))
-    (hanami/histogram :x2 {:nbins 20}))
+; ## Group: gamma
+(def gamma-dat
+  (ds/select-rows data #(= (:group %) "gamma")))
 
-(ds/info (ds/select-rows data #(= (:group %) "gamma")))
+^kind/vega
+(let [dat (ds/rows gamma-dat :as-maps)
+      column-names cols-of-interest]
+  {:data   {:values dat}
+   :repeat {:column column-names}
+   :spec   {:mark     "bar"
+            :encoding {:x     {:field {:repeat "column"}
+                               :bin   {:steps [1 3]} :type "quantitative"}
+                       :y     {:aggregate "count"}
+                       :color {:field :group}}}})
 
-(-> (:x2 (ds/select-rows data #(= (:group %) "gamma")))
-    dist-range)
+(ds/info gamma-dat)
 
-(-> (ds/select-rows data #(= (:group %) "log-normal"))
-    (hanami/histogram :x2 {:nbins 20}))
+; ## Group: log-normal
+(def log-normal-dat
+  (ds/select-rows data #(= (:group %) "log-normal")))
 
-(ds/info (ds/select-rows data #(= (:group %) "log-normal")))
+^kind/vega
+(let [dat (ds/rows log-normal-dat :as-maps)
+      column-names cols-of-interest]
+  {:data   {:values dat}
+   :repeat {:column column-names}
+   :spec   {:mark     "bar"
+            :encoding {:x     {:field {:repeat "column"}
+                               :bin   {:steps [1 3]} :type "quantitative"}
+                       :y     {:aggregate "count"}
+                       :color {:field :group}}}})
 
-(-> (:x2 (ds/select-rows data #(= (:group %) "log-normal")))
-    dist-range)
+(ds/info log-normal-dat)
 
-;; Scatter plot
+;; ## Full data
 (-> data
     (hanami/plot ht/point-chart
                  {:X "x1" :Y "x2" :COLOR "group"}))
 
 ^kind/vega
-(let [data (ds/rows data :as-maps)]
-  {:data     {:values data}
-   :mark     "bar"
-   :encoding {:x {:field :x1 :bin true :type "quantitative"}
-              :y {:aggregate "count"}
-              :color {:field :group}}})
+(let [dat (ds/rows data :as-maps)
+      column-names cols-of-interest]
+  {:data   {:values dat}
+   :repeat {:column column-names}
+   :spec   {:mark     "bar"
+            :encoding {:x     {:field {:repeat "column"}
+                               :bin   {:steps [1 3]} :type "quantitative"}
+                       :y     {:aggregate "count"}
+                       :color {:field :group}}}})
+
+(comment
+  (defn dist-range [dist]
+    (-> (apply max dist)
+        (-
+          (apply min dist)))))
+
+(comment                                                    ; live works, but wont render
+  (hanami/hconcat norm-dat {}
+                  [(hanami/histogram norm-dat :x1 {:nbins 20})
+                   (hanami/histogram norm-dat :x2 {:nbins 20})])
+
+  (hanami/hconcat gamma-dat {}
+                  [(hanami/histogram gamma-dat :x1 {:nbins 20})
+                   (hanami/histogram gamma-dat :x2 {:nbins 20})])
+
+  (hanami/hconcat log-normal-dat {}
+                  [(hanami/histogram log-normal-dat :x1 {:nbins 20})
+                   (hanami/histogram log-normal-dat :x2 {:nbins 20})])
+
+  ^kind/vega
+  (let [data (ds/rows data :as-maps)]
+    {:data     {:values data}
+     :mark     "bar"
+     :encoding {:x     {:field :x1 :bin {:steps [2 3]} :type "quantitative"}
+                :y     {:aggregate "count"}
+                :color {:field :group}}}))

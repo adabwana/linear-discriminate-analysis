@@ -12,16 +12,30 @@
     [scicloj.ml.dataset :as ds]))
 
 ;; # R Interop & Plot
-
+; ## Load the required R libraries
 (require-r '[base :refer [summary]]
            '[ggplot2 :refer [ggplot aes geom_point
                              geom_contour theme_bw]])
 
 (summary data)
 
+; ## Setup dataset
+; Clojure does a nice job constructing cartesian products with the `for` function. As an illustration:
+
+(def letters ["A" "B"])
+(def numbers [1 2 3])
+
+(for [x letters
+      y numbers]
+  [x y])
+
+; In other words, cartesian product takes each element of sequence x (in illustration, `letters`) and pairs them with each element of sequence y (in illustration, `numbers`) to create a new set of ordered pairs.
+
 (def dat (for [x (range -5 12 0.1)
                y (range -14 20 0.2)]
            {:x1 x :x2 y :group nil}))
+
+; Using the cartesian product, I can create a nil prediction dataset with :x1 and :x2 values from x in [-5, 12] to y in [-14, 20].
 
 (def contour-data
   (ds/dataset dat))
@@ -38,7 +52,9 @@
 (def lda-predict
   (ds/add-or-replace-column contour-data :group predictions))
 
-; stat_contour(aes(x = X1, y = X2, z = y), data = lda_predict)
+; Predictions variable is collecting the estimated :group based on the lda-pipe-fn plus the best model described in the last chapter. LDA-predict is putting those predictions in the contour-data set.
+
+; ## Plot LDA
 ^kind/hiccup
 (-> (ggplot :data data (aes :x 'x1 :y 'x2 :color 'group))
     (r+ (geom_point))

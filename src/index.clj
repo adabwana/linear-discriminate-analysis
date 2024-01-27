@@ -15,5 +15,10 @@
 ;
 ;What I did:
 ;
-;* Generated dataset based on three (semi-)distinct groupings.
-;*
+;* Generated dataset based on three groupings with overlaps.
+;* Visualized data with histograms and scatter plot.
+;* Implemented a univariate LDA from scratch.
+;* Implemented a multivariate LDA with Clojure's built-in functionality (still tuning my Clojure workflow). Resampled with bootstrapping repeated `b = 30` times.<br>
+;;&nbsp;&nbsp;&nbsp;&nbsp; * Tested a scale and normalized model pipeline versus raw data. Both models performed equivalently.
+;* R interop to visualize the multivariate model with ggplots2.
+;* Rendered document with Clay, pushed to GitHub, and had GitHub Actions deploy the static rendering to a webpage.

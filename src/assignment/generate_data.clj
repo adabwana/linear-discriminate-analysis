@@ -4,6 +4,7 @@
     [scicloj.ml.dataset :as ds]))
 
 ;; # Generate Data
+; ## Group: normal
 (defn norm-dist [len]
   (take len (dist/normal {:mu 0 :sd 4})))
 
@@ -12,6 +13,7 @@
    :x2    (norm-dist len)
    :group (take len (repeat "normal"))})
 
+; ## Group: gamma
 (defn gam-dist [len]
   (take len (dist/gamma {:shape 5 :rate 5})))
 
@@ -20,6 +22,7 @@
    :x2    (map #(* 8 %) (gam-dist len))
    :group (take len (repeat "gamma"))})
 
+; ## Group: log-normal
 (defn log-norm-dist [len]
   (take len (dist/log-normal {:mu 1 :sd 15 :scale 0.5})))
 
@@ -28,6 +31,7 @@
    :x2    (map #(* -2 %) (log-norm-dist len))
    :group (take len (repeat "log-normal"))})
 
+; ## Make dataset with the three groups
 (defn generate-data [len]
   (ds/dataset (merge-with concat (make-gamma-ds len) (make-normal-ds len) (make-log-normal-ds len))))
 

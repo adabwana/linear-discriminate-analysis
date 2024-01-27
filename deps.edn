@@ -1,15 +1,18 @@
-{:paths ["src" "notebooks" "data" "env/dev/src"]
+{:paths ["src" "data"]
 
  :deps  {org.clojure/clojure         {:mvn/version "1.11.1"}
-         org.scicloj/clay            {:mvn/version "2-alpha73"}
          aerial.hanami/aerial.hanami {:mvn/version "0.19.0"}
          org.scicloj/noj             {:mvn/version "1-alpha25"}
-         ;com.fzakaria/slf4j-timbre   {:mvn/version "0.4.1"}
          techascent/tech.ml.dataset  {:mvn/version "7.022"}
          scicloj/tablecloth          {:mvn/version "7.021"}
          scicloj/scicloj.ml          {:mvn/version "0.3"}
          kixi/stats                  {:mvn/version "0.5.5"}
          scicloj/clojisr             {:mvn/version "1.0.0-BETA22"}
-         generateme/fastmath         {:mvn/version "2.3.0"
-                                      :exclusions  [com.github.haifengl/smile-mkl]}}}
+         generateme/fastmath         {:mvn/version "2.2.1"
+                                      :exclusions  [com.github.haifengl/smile-mkl]}}
+ :aliases {:dev
+           {:extra-paths ["dev" "notebooks" "env/dev/src" "test"]
+            :extra-deps {com.fzakaria/slf4j-timbre   {:mvn/version "0.4.1"}
+                         org.scicloj/clay            {:mvn/version "2-alpha63"}}}}}
+
 
