@@ -1,0 +1,272 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Linear Discriminate Analysis",
+    "section": "",
+    "text": "(ns index)\n\n\n1 Assignment 2: Linear Discriminant Analysis (LDA)\nInstructions:\n\nGenerate a suitable dataset that contains three classes.\nScale, normalize, and/or encode your data appropriately.\nImplement and apply Univariate LDA.\nMake sure to use 5-fold cross-validation.\nModify the “README.md” file to include the following sections     * Summary: A one-paragraph summary of the algorithm that was implemented including any pertinent or useful information. If mathematics are appropriate, include those as well.     * Reflection: One paragraph describing useful takeaways from the week, things that surprised you, or things that caused you inordinate difficulty.\nMake sure that your README file is formatted properly and is visually appealing. It should be free of grammatical errors, punctuation errors, capitalization issues, etc.\n\nWhat I did:\n\nGenerated dataset based on three groupings with overlaps.\nVisualized data with histograms and scatter plot.\nImplemented a univariate LDA from scratch.\nImplemented a multivariate LDA with Clojure’s built-in functionality (still tuning my Clojure workflow). Resampled with bootstrapping repeated b = 30 times.      * Tested a scale and normalized model pipeline versus raw data. Both models performed equivalently.\nR interop to visualize the multivariate model with ggplots2.\nRendered document with Clay, pushed to GitHub, and had GitHub Actions deploy the static rendering to a webpage.\n\n\n\n\n\nsource: src/index.clj",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Assignment 2: Linear Discriminant Analysis (LDA)</span>"
+    ]
+  },
+  {
+    "objectID": "assignment.generate_data.html",
+    "href": "assignment.generate_data.html",
+    "title": "2  Generate Data",
+    "section": "",
+    "text": "2.1 Group: normal",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Generate Data</span>"
+    ]
+  },
+  {
+    "objectID": "assignment.generate_data.html#group-normal",
+    "href": "assignment.generate_data.html#group-normal",
+    "title": "2  Generate Data",
+    "section": "",
+    "text": "(defn norm-dist [len]\n  (take len (dist/normal {:mu 0 :sd 4})))\n\n\n(defn make-normal-ds [len]\n  {:x1    (take len (dist/normal {:mu 1 :sd 2 :location 3}))\n   :x2    (norm-dist len)\n   :group (take len (repeat \"normal\"))})",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Generate Data</span>"
+    ]
+  },
+  {
+    "objectID": "assignment.generate_data.html#group-gamma",
+    "href": "assignment.generate_data.html#group-gamma",
+    "title": "2  Generate Data",
+    "section": "2.2 Group: gamma",
+    "text": "2.2 Group: gamma\n\n(defn gam-dist [len]\n  (take len (dist/gamma {:shape 5 :rate 5})))\n\n\n(defn make-gamma-ds [len]\n  {:x1    (take len (dist/normal {:mu 0 :sd 2 :location 7}))\n   :x2    (map #(* 8 %) (gam-dist len))\n   :group (take len (repeat \"gamma\"))})",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Generate Data</span>"
+    ]
+  },
+  {
+    "objectID": "assignment.generate_data.html#group-log-normal",
+    "href": "assignment.generate_data.html#group-log-normal",
+    "title": "2  Generate Data",
+    "section": "2.3 Group: log-normal",
+    "text": "2.3 Group: log-normal\n\n(defn log-norm-dist [len]\n  (take len (dist/log-normal {:mu 1 :sd 15 :scale 0.5})))\n\n\n(defn make-log-normal-ds [len]\n  {:x1    (take len (dist/normal {:mu 0 :sd 2 :location -1}))\n   :x2    (map #(* -2 %) (log-norm-dist len))\n   :group (take len (repeat \"log-normal\"))})",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Generate Data</span>"
+    ]
+  },
+  {
+    "objectID": "assignment.generate_data.html#make-dataset-with-the-three-groups",
+    "href": "assignment.generate_data.html#make-dataset-with-the-three-groups",
+    "title": "2  Generate Data",
+    "section": "2.4 Make dataset with the three groups",
+    "text": "2.4 Make dataset with the three groups\n\n(defn generate-data [len]\n  (ds/dataset (merge-with concat (make-gamma-ds len) (make-normal-ds len) (make-log-normal-ds len))))\n\n\n(def data\n  (generate-data 200))\n\n\n\n\n\nsource: src/assignment/generate_data.clj",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Generate Data</span>"
+    ]
+  },
+  {
+    "objectID": "assignment.visualize_data.html",
+    "href": "assignment.visualize_data.html",
+    "title": "3  Visualize Data",
+    "section": "",
+    "text": "3.1 Group: normal\n_unnamed: descriptive-stats [3 12]:",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Visualize Data</span>"
+    ]
+  },
+  {
+    "objectID": "assignment.visualize_data.html#group-normal",
+    "href": "assignment.visualize_data.html#group-normal",
+    "title": "3  Visualize Data",
+    "section": "",
+    "text": "(def norm-dat\n  (-&gt; data\n      (ds/select-rows #(= (:group %) \"normal\"))))\n\n\n^kind/vega\n(let [dat (ds/rows norm-dat :as-maps)\n      column-names cols-of-interest]\n  {:data   {:values dat}\n   :repeat {:column column-names}\n   :spec   {:mark     \"bar\"\n            :encoding {:x     {:field {:repeat \"column\"}\n                               :bin   {:steps [1 3]} :type \"quantitative\"}\n                       :y     {:aggregate \"count\"}\n                       :color {:field :group}}}})\n\n\n\n\n\n\n\n(ds/info norm-dat)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n:col-name\n:datatype\n:n-valid\n:n-missing\n:min\n:mean\n:mode\n:max\n:standard-deviation\n:skew\n:first\n:last\n\n\n\n\n:x1\n:float64\n200\n0\n-4.25281761\n2.95381114\n\n10.28325405\n2.08410446\n0.18184457\n1.503\n4.946\n\n\n:x2\n:float64\n200\n0\n-10.09395076\n-0.02300916\n\n10.73706226\n3.98600442\n0.01987684\n7.853\n-5.308\n\n\n:group\n:string\n200\n0\n\n\nnormal\n\n\n\nnormal\nnormal",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Visualize Data</span>"
+    ]
+  },
+  {
+    "objectID": "assignment.visualize_data.html#group-gamma",
+    "href": "assignment.visualize_data.html#group-gamma",
+    "title": "3  Visualize Data",
+    "section": "3.2 Group: gamma",
+    "text": "3.2 Group: gamma\n\n(def gamma-dat\n  (ds/select-rows data #(= (:group %) \"gamma\")))\n\n\n^kind/vega\n(let [dat (ds/rows gamma-dat :as-maps)\n      column-names cols-of-interest]\n  {:data   {:values dat}\n   :repeat {:column column-names}\n   :spec   {:mark     \"bar\"\n            :encoding {:x     {:field {:repeat \"column\"}\n                               :bin   {:steps [1 3]} :type \"quantitative\"}\n                       :y     {:aggregate \"count\"}\n                       :color {:field :group}}}})\n\n\n\n\n\n\n\n(ds/info gamma-dat)\n\n_unnamed: descriptive-stats [3 12]:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n:col-name\n:datatype\n:n-valid\n:n-missing\n:min\n:mean\n:mode\n:max\n:standard-deviation\n:skew\n:first\n:last\n\n\n\n\n:x1\n:float64\n200\n0\n2.34924311\n7.05505026\n\n12.49800691\n1.96404129\n-0.13213939\n5.721\n6.708\n\n\n:x2\n:float64\n200\n0\n1.92293203\n7.66985483\n\n20.46919356\n3.15695914\n0.75624668\n12.20\n4.414\n\n\n:group\n:string\n200\n0\n\n\ngamma\n\n\n\ngamma\ngamma",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Visualize Data</span>"
+    ]
+  },
+  {
+    "objectID": "assignment.visualize_data.html#group-log-normal",
+    "href": "assignment.visualize_data.html#group-log-normal",
+    "title": "3  Visualize Data",
+    "section": "3.3 Group: log-normal",
+    "text": "3.3 Group: log-normal\n\n(def log-normal-dat\n  (ds/select-rows data #(= (:group %) \"log-normal\")))\n\n\n^kind/vega\n(let [dat (ds/rows log-normal-dat :as-maps)\n      column-names cols-of-interest]\n  {:data   {:values dat}\n   :repeat {:column column-names}\n   :spec   {:mark     \"bar\"\n            :encoding {:x     {:field {:repeat \"column\"}\n                               :bin   {:steps [1 3]} :type \"quantitative\"}\n                       :y     {:aggregate \"count\"}\n                       :color {:field :group}}}})\n\n\n\n\n\n\n\n(ds/info log-normal-dat)\n\n_unnamed: descriptive-stats [3 12]:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n:col-name\n:datatype\n:n-valid\n:n-missing\n:min\n:mean\n:mode\n:max\n:standard-deviation\n:skew\n:first\n:last\n\n\n\n\n:x1\n:float64\n200\n0\n-6.89232989\n-0.95995547\n\n5.49773612\n2.04158462\n-0.16200201\n-1.790\n-4.594\n\n\n:x2\n:float64\n200\n0\n-24.18794502\n-6.18493418\n\n-1.20978728\n3.24038923\n-1.73076024\n-7.969\n-5.015\n\n\n:group\n:string\n200\n0\n\n\nlog-normal\n\n\n\nlog-normal\nlog-normal",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Visualize Data</span>"
+    ]
+  },
+  {
+    "objectID": "assignment.visualize_data.html#full-data",
+    "href": "assignment.visualize_data.html#full-data",
+    "title": "3  Visualize Data",
+    "section": "3.4 Full data",
+    "text": "3.4 Full data\n\n(-&gt; data\n    (hanami/plot ht/point-chart\n                 {:X \"x1\" :Y \"x2\" :COLOR \"group\"}))\n\n\n\n\n\n\n\n^kind/vega\n(let [dat (ds/rows data :as-maps)\n      column-names cols-of-interest]\n  {:data   {:values dat}\n   :repeat {:column column-names}\n   :spec   {:mark     \"bar\"\n            :encoding {:x     {:field {:repeat \"column\"}\n                               :bin   {:steps [1 3]} :type \"quantitative\"}\n                       :y     {:aggregate \"count\"}\n                       :color {:field :group}}}})\n\n\n\n\n\n\n\n(comment\n  (defn dist-range [dist]\n    (-&gt; (apply max dist)\n        (-\n          (apply min dist)))))\n\n\n(comment                                                    ; live works, but wont render\n  (hanami/hconcat norm-dat {}\n                  [(hanami/histogram norm-dat :x1 {:nbins 20})\n                   (hanami/histogram norm-dat :x2 {:nbins 20})])\n\n  (hanami/hconcat gamma-dat {}\n                  [(hanami/histogram gamma-dat :x1 {:nbins 20})\n                   (hanami/histogram gamma-dat :x2 {:nbins 20})])\n\n  (hanami/hconcat log-normal-dat {}\n                  [(hanami/histogram log-normal-dat :x1 {:nbins 20})\n                   (hanami/histogram log-normal-dat :x2 {:nbins 20})])\n\n  ^kind/vega\n  (let [data (ds/rows data :as-maps)]\n    {:data     {:values data}\n     :mark     \"bar\"\n     :encoding {:x     {:field :x1 :bin {:steps [2 3]} :type \"quantitative\"}\n                :y     {:aggregate \"count\"}\n                :color {:field :group}}}))\n\n\n\n\n\nsource: src/assignment/visualize_data.clj",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Visualize Data</span>"
+    ]
+  },
+  {
+    "objectID": "assignment.lda_univariate.html",
+    "href": "assignment.lda_univariate.html",
+    "title": "4  Univariate LDA from Scratch",
+    "section": "",
+    "text": "4.1 Split data\nUse :holdout for a simple 1-split data.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Univariate LDA from Scratch</span>"
+    ]
+  },
+  {
+    "objectID": "assignment.lda_univariate.html#split-data",
+    "href": "assignment.lda_univariate.html#split-data",
+    "title": "4  Univariate LDA from Scratch",
+    "section": "",
+    "text": "(def train-test\n  (ds/split-&gt;seq (ds/drop-columns data :x2)\n                 :holdout {:ratio [0.8 0.2] :seed 0}))\n\n\n(def training (:train (first train-test)))\n\n\n(def testing (:test (first train-test)))",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Univariate LDA from Scratch</span>"
+    ]
+  },
+  {
+    "objectID": "assignment.lda_univariate.html#create-dataset-with-key-data",
+    "href": "assignment.lda_univariate.html#create-dataset-with-key-data",
+    "title": "4  Univariate LDA from Scratch",
+    "section": "4.2 Create dataset with key data",
+    "text": "4.2 Create dataset with key data\nOur key data includes mean, pooled-variance, and probabilities (called prior-prob) per group.\n\n(def pooled-variance\n  (-&gt; training\n      (ds/group-by [:group]\n                   {:result-type :as-map})\n      vals\n      (-&gt;&gt; (map :x1))\n      stats/pooled-variance))\n\n\n(def grouped-data\n  (-&gt; training\n      (ds/group-by [:group])\n      (ds/aggregate {:count #(count (% :x1))\n                     :mean  #(dfn/mean (% :x1))})\n      ;:variance #(stats/variance (% :x1))})\n      (ds/add-column :pooled-variance pooled-variance)\n      (ds/map-columns :prior-prob [:count] #(dfn// % (ds/row-count training)))\n      (ds/select-columns #{:group :mean :pooled-variance :prior-prob})))\n\n\n4.2.1 View grouped data\n\ngrouped-data\n\n_unnamed [3 4]:\n\n\n\n:group\n:mean\n:pooled-variance\n:prior-prob\n\n\n\n\nnormal\n2.91548469\n3.99427481\n0.3271\n\n\nlog-normal\n-0.99709851\n3.99427481\n0.3479\n\n\ngamma\n7.15330619\n3.99427481\n0.3250",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Univariate LDA from Scratch</span>"
+    ]
+  },
+  {
+    "objectID": "assignment.lda_univariate.html#create-our-key-function",
+    "href": "assignment.lda_univariate.html#create-our-key-function",
+    "title": "4  Univariate LDA from Scratch",
+    "section": "4.3 Create our key function",
+    "text": "4.3 Create our key function\nIn order to classify our data, we need to compare discriminate scores. In univariate linear discriminant analysis, the calculation is much simplified as compared to multivariate, which involves matrices.\n\n(defn discriminant-score [x mu var pi]\n  (+\n    (- (* x (/ mu var)) (/ (Math/pow mu 2) (* 2 var)))\n    (Math/log pi)))",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Univariate LDA from Scratch</span>"
+    ]
+  },
+  {
+    "objectID": "assignment.lda_univariate.html#implement-labeling",
+    "href": "assignment.lda_univariate.html#implement-labeling",
+    "title": "4  Univariate LDA from Scratch",
+    "section": "4.4 Implement labeling",
+    "text": "4.4 Implement labeling\nThis is our classifying function.\n\n(defn map-predict [dat]\n  (-&gt; (map\n        (fn [data-point]\n          (-&gt; grouped-data\n              (ds/map-columns\n                :predict\n                (ds/column-names grouped-data #{:mean :pooled-variance :prior-prob})\n                (fn [mu var pi]\n                  (discriminant-score data-point mu var pi)))\n              (ds/order-by :predict :desc)\n              (ds/select :group 0)\n              :group\n              vec))\n        dat)\n      ds/dataset\n      (ds/rename-columns 0 {0 :predict})))\n\n\n4.4.1 How’s map-predict work?\nGiven a sequence of numbers, we are finding the highest discriminant score and labeling the data points that corresponding group. For example, let’s sniff test our expectations, such as data near 0 is log-normal, data near 3 is normal, and data near 7 is gamma.\n\ngrouped-data\n\n_unnamed [3 4]:\n\n\n\n:group\n:mean\n:pooled-variance\n:prior-prob\n\n\n\n\nnormal\n2.91548469\n3.99427481\n0.3271\n\n\nlog-normal\n-0.99709851\n3.99427481\n0.3479\n\n\ngamma\n7.15330619\n3.99427481\n0.3250\n\n\n\n\n(map-predict [0 1 2 3 4 5 6 7])\n\n:_unnamed [8 1]:\n\n\n\n:predict\n\n\n\n\nlog-normal\n\n\nlog-normal\n\n\nnormal\n\n\nnormal\n\n\nnormal\n\n\nnormal\n\n\ngamma\n\n\ngamma\n\n\n\nThe results seem close to expectations.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Univariate LDA from Scratch</span>"
+    ]
+  },
+  {
+    "objectID": "assignment.lda_univariate.html#predictions-vs-actual",
+    "href": "assignment.lda_univariate.html#predictions-vs-actual",
+    "title": "4  Univariate LDA from Scratch",
+    "section": "4.5 Predictions vs Actual",
+    "text": "4.5 Predictions vs Actual\n\n4.5.1 Training\n\n(def pred-train\n  (let [data (vec (:x1 training))]\n    (vec (:predict (map-predict data)))))\n\n\n(def actual-train\n  (vec (:group training)))\n\n\n(ml/confusion-map-&gt;ds (ml/confusion-map pred-train actual-train :none))\n\n_unnamed [4 4]:\n\n\n\n:column-name\ngamma\nlog-normal\nnormal\n\n\n\n\ncolumn-name\ngamma\nlog-normal\nnormal\n\n\ngamma\n135\n0.000\n21\n\n\nlog-normal\n1\n142\n24\n\n\nnormal\n20\n20\n117\n\n\n\nConfusion matrices made in Clojure’s machine learning library (scicloj) according to the prescribed order (predicted-labels [true-]labels), have the TRUE classes horizontally. The columns represent the prediction values.\n\n(ml/classification-accuracy pred-train actual-train)\n\n\n0.8208333333333333\n\n\n(stats/cohens-kappa pred-train actual-train)\n\n\n0.7312080012501954\n\n\n(stats/mcc pred-train actual-train)\n\n\n0.731327060640201\n\n\n\n4.5.2 Test\n\n(def pred-test\n  (let [dat (vec (:x1 testing))]\n    (vec (:predict (map-predict dat)))))\n\n\n(def actual-test\n  (vec (:group testing)))\n\n\n(ml/confusion-map-&gt;ds (ml/confusion-map pred-test actual-test :none))\n\n_unnamed [4 4]:\n\n\n\n:column-name\ngamma\nlog-normal\nnormal\n\n\n\n\ncolumn-name\ngamma\nlog-normal\nnormal\n\n\ngamma\n33\n0.000\n11\n\n\nlog-normal\n0.000\n26\n7\n\n\nnormal\n6\n6\n31\n\n\n\n\n(ml/classification-accuracy pred-test actual-test)\n\n\n0.75\n\n\n(stats/cohens-kappa pred-test actual-test)\n\n\n0.621888457094843\n\n\n(stats/mcc pred-test actual-test)\n\n\n0.6239244049747774\n\nPerformance on test is less than training. This is not unexpected, in fact it’s quite common. Test data statistic may be better than the training data in cases where 1) the data is rather normal (no outliers), 2) the model is most appropriate to the data (e.g. a linear relation is modeled linearly) and/or 3) data size is small allowing for higher variation of these statistics.\nAs for this model, having Cohen’s Kappa and Mathews Correlation Coefficient greater than .6 is encouraging if only because, if you recall our :x1 distributions by group (final plot in our “Visualize Data” section), there is heavy overlap between our three groups.\n\n\n\n\nsource: src/assignment/lda_univariate.clj",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Univariate LDA from Scratch</span>"
+    ]
+  },
+  {
+    "objectID": "assignment.lda.html",
+    "href": "assignment.lda.html",
+    "title": "5  Linear Discriminate Analysis",
+    "section": "",
+    "text": "5.1 Build pipelines",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Linear Discriminate Analysis</span>"
+    ]
+  },
+  {
+    "objectID": "assignment.lda.html#build-pipelines",
+    "href": "assignment.lda.html#build-pipelines",
+    "title": "5  Linear Discriminate Analysis",
+    "section": "",
+    "text": "5.1.1 Input transforming pipelines\nIn order for :smile.classification to work, categorical data needs to be transformed to numeric.\n\n(def pipeline-fn\n  (ml/pipeline\n    (mm/categorical-&gt;number [response])\n    (mm/set-inference-target response)))\n\n\n(def pipeline-std-fn\n  (ml/pipeline\n    (mm/std-scale regressors {})\n    (mm/categorical-&gt;number [response])\n    (mm/set-inference-target response)))\n\n\n\n5.1.2 Model building pipelines\n\n(ml/hyperparameters\n  :smile.classification/linear-discriminant-analysis)\n\n\nnil\n\nNo hyperparameters.\n\n(defn lda-piping-fn [pipeline]\n  (ml/pipeline\n    pipeline\n    {:metamorph/id :model}\n    (mm/model\n      {:model-type :smile.classification/linear-discriminant-analysis})))\n\n\n\n5.1.3 Input_Transform-&gt;Model_Building pipelines\n\n(def lda-pipe-fn\n  (lda-piping-fn pipeline-fn))\n\n\n(def lda-std-pipe-fn\n  (lda-piping-fn pipeline-std-fn))\n\n\n5.1.3.1 View output of a fitted-pipeline\n\n(-&gt; data\n    (ml/transform-pipe lda-std-pipe-fn\n                       (ml/fit-pipe data lda-std-pipe-fn))\n    :metamorph/data\n    ds/shuffle\n    ds/head)\n\n:_unnamed [5 4]:\n\n\n\nlog-normal\nnormal\ngamma\n:group\n\n\n\n\n0.03770042\n0.28809817\n0.67420141\n2.0\n\n\n0.11867611\n0.37145780\n0.50986609\n2.0\n\n\n0.10155604\n0.34730272\n0.55114124\n2.0\n\n\n0.13355578\n0.43690179\n0.42954243\n1.0\n\n\n0.46773398\n0.37908415\n0.15318188\n0.0",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Linear Discriminate Analysis</span>"
+    ]
+  },
+  {
+    "objectID": "assignment.lda.html#partition-data",
+    "href": "assignment.lda.html#partition-data",
+    "title": "5  Linear Discriminate Analysis",
+    "section": "5.2 Partition data",
+    "text": "5.2 Partition data\n\n(def train-test\n  (ds/split-&gt;seq data :bootstrap {:repeats 30}))\n\nClojure’s default :bootstrapping process takes a :repeats argument that is equivalent to b, number of bootstraps. Its training data proportion is determined by :ratio, whose default is 1. The test data is the out-of-bag data, which would include the 1 - ratio data when :ratio is not 1.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Linear Discriminate Analysis</span>"
+    ]
+  },
+  {
+    "objectID": "assignment.lda.html#evaluate-pipes",
+    "href": "assignment.lda.html#evaluate-pipes",
+    "title": "5  Linear Discriminate Analysis",
+    "section": "5.3 Evaluate pipes",
+    "text": "5.3 Evaluate pipes\n\n(def evaluate-pipes\n  (ml/evaluate-pipelines\n    [lda-pipe-fn lda-std-pipe-fn]\n    train-test\n    stats/cohens-kappa\n    :accuracy\n    {:other-metrices            [{:name :accuracy\n                                  :metric-fn ml/classification-accuracy}\n                                 {:name :mathews-cor-coef\n                                  :metric-fn stats/mcc}]\n     :return-best-pipeline-only false}))",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Linear Discriminate Analysis</span>"
+    ]
+  },
+  {
+    "objectID": "assignment.lda.html#extract-models",
+    "href": "assignment.lda.html#extract-models",
+    "title": "5  Linear Discriminate Analysis",
+    "section": "5.4 Extract models",
+    "text": "5.4 Extract models\n\n(def models\n  (-&gt;&gt; evaluate-pipes\n       flatten\n       (map\n         #(hash-map :summary (ml/thaw-model (get-in % [:fit-ctx :model]))\n                    :fit-ctx (:fit-ctx %)\n                    :timing-fit (:timing-fit %)\n                    :metric ((comp :metric :test-transform) %)\n                    :other-metrices ((comp :other-metrices :test-transform) %)\n                    :params ((comp :options :model :fit-ctx) %)\n                    :pipe-fn (:pipe-fn %)))\n       (sort-by :metric)))\n\n\n5.4.1 View model stats\n\n(count models)\n\n\n2\n\n\n(-&gt; models first :metric)\n\n\n0.9078947368421054\n\n\n(-&gt; models first :other-metrices\n    (-&gt;&gt; (map #(select-keys % [:name :metric]))))\n\n\n({:name :accuracy, :metric 0.9391304347826087}\n {:name :mathews-cor-coef, :metric 0.9079986283313578})\n\n\n(-&gt; models second :metric)\n\n\n0.9078947368421054\n\n\n(-&gt; models second :other-metrices\n    (-&gt;&gt; (map #(select-keys % [:name :metric]))))\n\n\n({:name :accuracy, :metric 0.9391304347826087}\n {:name :mathews-cor-coef, :metric 0.9079986283313578})\n\nTwo models with exactly the same statistics. Meaning in this particular case, scaling and normalizing our data was not required for an improvement in the classification of groups.\n\n(-&gt; models first :fit-ctx second)\n\n\n[#uuid \"9765cda3-cf0e-4e34-9db4-ce9cfbf2f3ce\"\n {:fit-std-xform\n  {:x1\n   {:mean 3.174954238927112, :standard-deviation 3.772311140104022},\n   :x2\n   {:mean 0.5409722477186786, :standard-deviation 6.86250404733226}}}]\n\nlook for :fit-ctx second has StdScaleTransform Notice in our first model’s :fit-ctx we have a :fit-std-xform. That means this is our standardized pipeline. Might be interesting to keep this in mind for the next table.\n\n(-&gt; (model-&gt;ds (eval-maps models 2))\n    (ds/rename-columns {:metric-1 :kappa                    ;TODO: extract from models\n                        :metric-2 :accuracy\n                        :metric-3 :mathews-cor-coef}))\n\n_unnamed [2 5]:\n\n\n\n\n\n\n\n\n\n\n:model-type\n:compute-time-ns\n:kappa\n:accuracy\n:mathews-cor-coef\n\n\n\n\n:smile.classification/linear-discriminant-analysis\n876180\n0.90789474\n0.93913043\n0.90799863\n\n\n:smile.classification/linear-discriminant-analysis\n1246725\n0.90789474\n0.93913043\n0.90799863\n\n\n\nIn Clojure, these metrics are rated on our :test data which is embedded in the partition data, train-test, and extracted in variable models.\nEverything’s the same except compute time.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Linear Discriminate Analysis</span>"
+    ]
+  },
+  {
+    "objectID": "assignment.lda.html#evaluations",
+    "href": "assignment.lda.html#evaluations",
+    "title": "5  Linear Discriminate Analysis",
+    "section": "5.5 Evaluations",
+    "text": "5.5 Evaluations\nAbove we can see our models’ statistic on the test data. We might want to see how the best model fits on the full data.\n\n(def predictions\n  (-&gt; data\n      (ml/transform-pipe\n        lda-pipe-fn\n        (-&gt; models first :fit-ctx))\n      :metamorph/data\n      :group\n      vec))\n\n\n(def actual\n  (-&gt; data\n      (ml/fit-pipe lda-pipe-fn)\n      :metamorph/data\n      :group\n      vec))\n\nThe actual variable looks like we are fitting a model, however, the code is running our data through the input-transforming pipeline as to get the appropriate mapping between group category and its respective numerical coding.\n\n(ml/confusion-map-&gt;ds (ml/confusion-map predictions actual :none))\n\n_unnamed [4 4]:\n\n\n\n:column-name\n0\n1\n2\n\n\n\n\ncolumn-name\n0\n1\n2\n\n\n0\n188\n12\n0.000\n\n\n1\n23\n51\n126\n\n\n2\n0.000\n0.000\n200\n\n\n\n\n(-&gt; models second :fit-ctx :model\n    :target-categorical-maps :group :lookup-table)\n\n\n{\"log-normal\" 0, \"normal\" 1, \"gamma\" 2}\n\n\n(ml/classification-accuracy predictions actual)\n\n\n0.7316666666666667\n\n\n(stats/cohens-kappa predictions actual)\n\n\n-0.49999999999999994\n\n\n(stats/mcc predictions actual)\n\n\n-0.5406932780138165\n\nWoah! Something is wrong with the calculations. Let’s see the datatypes:\n\n(type (first predictions))\n\n\njava.lang.Double\n\n\n(type (first actual))\n\n\njava.lang.Long\n\nOne is a long type the other is a type double. These are not the same, which is why our kappa and mcc were so horribly low. Notice different datatypes’ equivalencies and identities.\n\n(= [1] `(1))\n\n\ntrue\n\n\n(identical? [1] `(1))\n\n\nfalse\n\nVectors [] are equivalent to lists `() (both in the sequence partition of Clojure.core), but not identical.\n\n(= 1 1)\n\n\ntrue\n\n\n(= 1 1.0)\n\n\nfalse\n\n\n(identical? 1 1.0)\n\n\nfalse\n\nBut long 1 and double 1 are neither equivalent nor identical.\nI will map each more precise type (double) to the less granular type (long) as to ensure we are calculating the stats properly.\n\n(ml/classification-accuracy (vec (map #(long %) predictions)) actual)\n\n\n0.7316666666666667\n\n\n(stats/cohens-kappa (vec (map #(long %) predictions)) actual)\n\n\n0.5975\n\n\n(stats/mcc (vec (map #(long %) predictions)) actual)\n\n\n0.6461284672265107\n\nIt’s better, however, it is interesting to see that adding an additional predictor, :x2, we aren’t getting a bump in performance based on kappa and mcc.\n\n\n\n\nsource: src/assignment/lda.clj",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Linear Discriminate Analysis</span>"
+    ]
+  },
+  {
+    "objectID": "assignment.r_interop.html",
+    "href": "assignment.r_interop.html",
+    "title": "6  R Interop & Plot",
+    "section": "",
+    "text": "6.1 Load the required R libraries",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>R Interop & Plot</span>"
+    ]
+  },
+  {
+    "objectID": "assignment.r_interop.html#load-the-required-r-libraries",
+    "href": "assignment.r_interop.html#load-the-required-r-libraries",
+    "title": "6  R Interop & Plot",
+    "section": "",
+    "text": "(require-r '[base :refer [summary]]\n           '[ggplot2 :refer [ggplot aes geom_point\n                             geom_contour theme_bw]])\n\n\nnil\n\n\n(summary data)\n\n\n       x1                x2              group          \n Min.   :-6.8923   Min.   :-24.1879   Length:600        \n 1st Qu.: 0.1245   1st Qu.: -4.8705   Class :character  \n Median : 2.8146   Median :  0.1774   Mode  :character  \n Mean   : 3.0163   Mean   :  0.4873                     \n 3rd Qu.: 6.0849   3rd Qu.:  6.0392                     \n Max.   :12.4980   Max.   : 20.4692",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>R Interop & Plot</span>"
+    ]
+  },
+  {
+    "objectID": "assignment.r_interop.html#setup-dataset",
+    "href": "assignment.r_interop.html#setup-dataset",
+    "title": "6  R Interop & Plot",
+    "section": "6.2 Setup dataset",
+    "text": "6.2 Setup dataset\nClojure does a nice job constructing cartesian products with the for function. As an illustration:\n\n(def letters [\"A\" \"B\"])\n\n\n(def numbers [1 2 3])\n\n\n(for [x letters\n      y numbers]\n  [x y])\n\n\n([\"A\" 1] [\"A\" 2] [\"A\" 3] [\"B\" 1] [\"B\" 2] [\"B\" 3])\n\nIn other words, cartesian product takes each element of sequence x (in illustration, letters) and pairs them with each element of sequence y (in illustration, numbers) to create a new set of ordered pairs.\n\n(def dat (for [x (range -5 12 0.1)\n               y (range -14 20 0.2)]\n           {:x1 x :x2 y :group nil}))\n\nUsing the cartesian product, I can create a nil prediction dataset with :x1 and :x2 values from x in [-5, 12] to y in [-14, 20].\n\n(def contour-data\n  (ds/dataset dat))\n\n\n(def predictions\n  (-&gt; contour-data\n      (ml/transform-pipe\n        lda-pipe-fn\n        (-&gt; models second :fit-ctx))\n      :metamorph/data\n      :group\n      vec))\n\n\n(def lda-predict\n  (ds/add-or-replace-column contour-data :group predictions))\n\nPredictions variable is collecting the estimated :group based on the lda-pipe-fn plus the best model described in the last chapter. LDA-predict is putting those predictions in the contour-data set.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>R Interop & Plot</span>"
+    ]
+  },
+  {
+    "objectID": "assignment.r_interop.html#plot-lda",
+    "href": "assignment.r_interop.html#plot-lda",
+    "title": "6  R Interop & Plot",
+    "section": "6.3 Plot LDA",
+    "text": "6.3 Plot LDA\n\n^kind/hiccup\n(-&gt; (ggplot :data data (aes :x 'x1 :y 'x2 :color 'group))\n    (r+ (geom_point))\n    (r+ (geom_contour :data lda-predict (aes :x 'x1 :y 'x2 :z 'group) :col \"black\"))\n    (r+ (theme_bw))\n    plot-&gt;svg)\n\n\n\n\n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             \n\n\n\n(comment                                                    ;reverse process\n  (def dat\n    (for [minx (Math/floor (apply min (:x1 data)))\n          maxx (Math/floor (apply max (:x1 data)))\n          miny (Math/floor (apply min (:x2 data)))\n          maxy (Math/floor (apply max (:x2 data)))\n          x (range (int minx) (int maxx) 0.1)\n          y (range (int miny) (int maxy) 0.2)]\n      {:x1 x :x2 y :group nil}))\n\n  (def lookup-table\n    (-&gt; models second :fit-ctx :model\n        :target-categorical-maps :group :lookup-table))\n\n  (def lookup-table-invert\n    (clojure.set/map-invert lookup-table))\n\n  (def lda-predict\n    (-&gt; lda-pred-pre-transform\n        (ds/add-or-replace-column\n          :group (map #(get lookup-table-invert %)\n                      (map int (:group lda-predict)))))))\n\n\n\n\n\nsource: src/assignment/r_interop.clj",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>R Interop & Plot</span>"
+    ]
+  }
+]

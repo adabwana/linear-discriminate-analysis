@@ -1,0 +1,125 @@
+
+---
+format:
+  html:
+    theme: {dark: cyborg, light: yeti}
+    toc: true
+    toc-depth: 4
+    output-file: assignment.generate_data.html
+code-block-background: true
+base-target-path: temp
+include-in-header: {text: '<link rel = "icon" href = "data:," />'}
+
+---
+<style></style><style>.printedClojure .sourceCode {
+  background-color: transparent;
+  border-style: none;
+}
+</style>
+<script src="assignment.generate_data_files/md-default0.js" type="text/javascript"></script><script src="assignment.generate_data_files/md-default1.js" type="text/javascript"></script>
+
+::: {.sourceClojure}
+```clojure
+(ns assignment.generate-data
+  (:require
+    [kixi.stats.distribution :as dist]
+    [scicloj.ml.dataset :as ds]))
+```
+:::
+
+
+
+# Generate Data
+
+## Group: normal
+
+
+::: {.sourceClojure}
+```clojure
+(defn norm-dist [len]
+  (take len (dist/normal {:mu 0 :sd 4})))
+```
+:::
+
+
+
+::: {.sourceClojure}
+```clojure
+(defn make-normal-ds [len]
+  {:x1    (take len (dist/normal {:mu 1 :sd 2 :location 3}))
+   :x2    (norm-dist len)
+   :group (take len (repeat "normal"))})
+```
+:::
+
+
+
+## Group: gamma
+
+
+::: {.sourceClojure}
+```clojure
+(defn gam-dist [len]
+  (take len (dist/gamma {:shape 5 :rate 5})))
+```
+:::
+
+
+
+::: {.sourceClojure}
+```clojure
+(defn make-gamma-ds [len]
+  {:x1    (take len (dist/normal {:mu 0 :sd 2 :location 7}))
+   :x2    (map #(* 8 %) (gam-dist len))
+   :group (take len (repeat "gamma"))})
+```
+:::
+
+
+
+## Group: log-normal
+
+
+::: {.sourceClojure}
+```clojure
+(defn log-norm-dist [len]
+  (take len (dist/log-normal {:mu 1 :sd 15 :scale 0.5})))
+```
+:::
+
+
+
+::: {.sourceClojure}
+```clojure
+(defn make-log-normal-ds [len]
+  {:x1    (take len (dist/normal {:mu 0 :sd 2 :location -1}))
+   :x2    (map #(* -2 %) (log-norm-dist len))
+   :group (take len (repeat "log-normal"))})
+```
+:::
+
+
+
+## Make dataset with the three groups
+
+
+::: {.sourceClojure}
+```clojure
+(defn generate-data [len]
+  (ds/dataset (merge-with concat (make-gamma-ds len) (make-normal-ds len) (make-log-normal-ds len))))
+```
+:::
+
+
+
+::: {.sourceClojure}
+```clojure
+(def data
+  (generate-data 200))
+```
+:::
+
+
+<div style="background-color:grey;height:2px;width:100%;"></div>
+
+<div><pre><small><small>source: src/assignment/generate_data.clj</small></small></pre></div>

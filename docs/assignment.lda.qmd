@@ -1,0 +1,674 @@
+
+---
+format:
+  html:
+    theme: {dark: cyborg, light: yeti}
+    toc: true
+    toc-depth: 4
+    output-file: assignment.lda.html
+code-block-background: true
+base-target-path: temp
+include-in-header: {text: '<link rel = "icon" href = "data:," />'}
+
+---
+<style></style><style>.printedClojure .sourceCode {
+  background-color: transparent;
+  border-style: none;
+}
+</style>
+<script src="assignment.lda_files/md-default0.js" type="text/javascript"></script><script src="assignment.lda_files/md-default1.js" type="text/javascript"></script>
+
+::: {.sourceClojure}
+```clojure
+(ns assignment.lda
+  (:require
+    [assignment.generate-data :refer [data]]
+    [calc-metric.patch]
+    [fastmath.stats :as stats]
+    [scicloj.ml.core :as ml]
+    [scicloj.ml.dataset :as ds]
+    [scicloj.ml.metamorph :as mm]
+    [utils.helpful-extracts :refer [eval-maps model->ds]]))
+```
+:::
+
+
+
+# Linear Discriminate Analysis
+
+
+::: {.sourceClojure}
+```clojure
+(def response :group)
+```
+:::
+
+
+
+::: {.sourceClojure}
+```clojure
+(def regressors
+  (remove #{response} (ds/column-names data)))
+```
+:::
+
+
+
+## Build pipelines
+
+### Input transforming pipelines
+In order for `:smile.classification` to work, categorical data needs to be transformed to numeric.
+
+
+::: {.sourceClojure}
+```clojure
+(def pipeline-fn
+  (ml/pipeline
+    (mm/categorical->number [response])
+    (mm/set-inference-target response)))
+```
+:::
+
+
+
+::: {.sourceClojure}
+```clojure
+(def pipeline-std-fn
+  (ml/pipeline
+    (mm/std-scale regressors {})
+    (mm/categorical->number [response])
+    (mm/set-inference-target response)))
+```
+:::
+
+
+
+### Model building pipelines
+
+
+::: {.sourceClojure}
+```clojure
+(ml/hyperparameters
+  :smile.classification/linear-discriminant-analysis)
+```
+:::
+
+
+
+::: {.printedClojure}
+```clojure
+nil
+
+```
+:::
+
+
+No hyperparameters.
+
+
+::: {.sourceClojure}
+```clojure
+(defn lda-piping-fn [pipeline]
+  (ml/pipeline
+    pipeline
+    {:metamorph/id :model}
+    (mm/model
+      {:model-type :smile.classification/linear-discriminant-analysis})))
+```
+:::
+
+
+
+### Input_Transform->Model_Building pipelines
+
+
+::: {.sourceClojure}
+```clojure
+(def lda-pipe-fn
+  (lda-piping-fn pipeline-fn))
+```
+:::
+
+
+
+::: {.sourceClojure}
+```clojure
+(def lda-std-pipe-fn
+  (lda-piping-fn pipeline-std-fn))
+```
+:::
+
+
+
+#### View output of a fitted-pipeline
+
+
+::: {.sourceClojure}
+```clojure
+(-> data
+    (ml/transform-pipe lda-std-pipe-fn
+                       (ml/fit-pipe data lda-std-pipe-fn))
+    :metamorph/data
+    ds/shuffle
+    ds/head)
+```
+:::
+
+
+:_unnamed [5 4]:
+
+| log-normal |     normal |      gamma | :group |
+|-----------:|-----------:|-----------:|-------:|
+| 0.03770042 | 0.28809817 | 0.67420141 |    2.0 |
+| 0.11867611 | 0.37145780 | 0.50986609 |    2.0 |
+| 0.10155604 | 0.34730272 | 0.55114124 |    2.0 |
+| 0.13355578 | 0.43690179 | 0.42954243 |    1.0 |
+| 0.46773398 | 0.37908415 | 0.15318188 |    0.0 |
+
+
+
+
+## Partition data
+
+
+::: {.sourceClojure}
+```clojure
+(def train-test
+  (ds/split->seq data :bootstrap {:repeats 30}))
+```
+:::
+
+
+Clojure's default `:bootstrapping` process takes a `:repeats` argument that is equivalent to `b`, number of bootstraps. Its training data proportion is determined by `:ratio`, whose default is `1`. The test data is the out-of-bag data, which would include the `1 - ratio` data when `:ratio` is not 1.
+
+## Evaluate pipes
+
+
+::: {.sourceClojure}
+```clojure
+(def evaluate-pipes
+  (ml/evaluate-pipelines
+    [lda-pipe-fn lda-std-pipe-fn]
+    train-test
+    stats/cohens-kappa
+    :accuracy
+    {:other-metrices            [{:name :accuracy
+                                  :metric-fn ml/classification-accuracy}
+                                 {:name :mathews-cor-coef
+                                  :metric-fn stats/mcc}]
+     :return-best-pipeline-only false}))
+```
+:::
+
+
+
+## Extract models
+
+
+::: {.sourceClojure}
+```clojure
+(def models
+  (->> evaluate-pipes
+       flatten
+       (map
+         #(hash-map :summary (ml/thaw-model (get-in % [:fit-ctx :model]))
+                    :fit-ctx (:fit-ctx %)
+                    :timing-fit (:timing-fit %)
+                    :metric ((comp :metric :test-transform) %)
+                    :other-metrices ((comp :other-metrices :test-transform) %)
+                    :params ((comp :options :model :fit-ctx) %)
+                    :pipe-fn (:pipe-fn %)))
+       (sort-by :metric)))
+```
+:::
+
+
+
+### View model stats
+
+
+::: {.sourceClojure}
+```clojure
+(count models)
+```
+:::
+
+
+
+::: {.printedClojure}
+```clojure
+2
+
+```
+:::
+
+
+
+::: {.sourceClojure}
+```clojure
+(-> models first :metric)
+```
+:::
+
+
+
+::: {.printedClojure}
+```clojure
+0.9078947368421054
+
+```
+:::
+
+
+
+::: {.sourceClojure}
+```clojure
+(-> models first :other-metrices
+    (->> (map #(select-keys % [:name :metric]))))
+```
+:::
+
+
+
+::: {.printedClojure}
+```clojure
+({:name :accuracy, :metric 0.9391304347826087}
+ {:name :mathews-cor-coef, :metric 0.9079986283313578})
+
+```
+:::
+
+
+
+::: {.sourceClojure}
+```clojure
+(-> models second :metric)
+```
+:::
+
+
+
+::: {.printedClojure}
+```clojure
+0.9078947368421054
+
+```
+:::
+
+
+
+::: {.sourceClojure}
+```clojure
+(-> models second :other-metrices
+    (->> (map #(select-keys % [:name :metric]))))
+```
+:::
+
+
+
+::: {.printedClojure}
+```clojure
+({:name :accuracy, :metric 0.9391304347826087}
+ {:name :mathews-cor-coef, :metric 0.9079986283313578})
+
+```
+:::
+
+
+Two models with exactly the same statistics. Meaning in this particular case, scaling and normalizing our data was not required for an improvement in the classification of groups.
+
+
+::: {.sourceClojure}
+```clojure
+(-> models first :fit-ctx second)
+```
+:::
+
+
+
+::: {.printedClojure}
+```clojure
+[#uuid "9765cda3-cf0e-4e34-9db4-ce9cfbf2f3ce"
+ {:fit-std-xform
+  {:x1
+   {:mean 3.174954238927112, :standard-deviation 3.772311140104022},
+   :x2
+   {:mean 0.5409722477186786, :standard-deviation 6.86250404733226}}}]
+
+```
+:::
+
+
+look for :fit-ctx second has StdScaleTransform
+Notice in our first model's `:fit-ctx` we have a `:fit-std-xform`. That means this is our standardized pipeline. Might be interesting to keep this in mind for the next table.
+
+
+::: {.sourceClojure}
+```clojure
+(-> (model->ds (eval-maps models 2))
+    (ds/rename-columns {:metric-1 :kappa                    ;TODO: extract from models
+                        :metric-2 :accuracy
+                        :metric-3 :mathews-cor-coef}))
+```
+:::
+
+
+_unnamed [2 5]:
+
+|                                        :model-type | :compute-time-ns |     :kappa |  :accuracy | :mathews-cor-coef |
+|----------------------------------------------------|-----------------:|-----------:|-----------:|------------------:|
+| :smile.classification/linear-discriminant-analysis |           876180 | 0.90789474 | 0.93913043 |        0.90799863 |
+| :smile.classification/linear-discriminant-analysis |          1246725 | 0.90789474 | 0.93913043 |        0.90799863 |
+
+
+
+In Clojure, these metrics are rated on our `:test` data which is embedded in the partition data, `train-test`, and extracted in variable `models`.
+
+Everything's the same except compute time.
+
+## Evaluations
+Above we can see our models' statistic on the test data. We might want to see how the best model fits on the full data.
+
+
+::: {.sourceClojure}
+```clojure
+(def predictions
+  (-> data
+      (ml/transform-pipe
+        lda-pipe-fn
+        (-> models first :fit-ctx))
+      :metamorph/data
+      :group
+      vec))
+```
+:::
+
+
+
+::: {.sourceClojure}
+```clojure
+(def actual
+  (-> data
+      (ml/fit-pipe lda-pipe-fn)
+      :metamorph/data
+      :group
+      vec))
+```
+:::
+
+
+The `actual` variable looks like we are fitting a model, however, the code is running our data through the *input-transforming* pipeline as to get the appropriate mapping between group category and its respective numerical coding.
+
+
+::: {.sourceClojure}
+```clojure
+(ml/confusion-map->ds (ml/confusion-map predictions actual :none))
+```
+:::
+
+
+_unnamed [4 4]:
+
+| :column-name |     0 |     1 |     2 |
+|--------------|-------|-------|-------|
+|  column-name |     0 |     1 |     2 |
+|            0 |   188 |    12 | 0.000 |
+|            1 |    23 |    51 |   126 |
+|            2 | 0.000 | 0.000 |   200 |
+
+
+
+
+::: {.sourceClojure}
+```clojure
+(-> models second :fit-ctx :model
+    :target-categorical-maps :group :lookup-table)
+```
+:::
+
+
+
+::: {.printedClojure}
+```clojure
+{"log-normal" 0, "normal" 1, "gamma" 2}
+
+```
+:::
+
+
+
+::: {.sourceClojure}
+```clojure
+(ml/classification-accuracy predictions actual)
+```
+:::
+
+
+
+::: {.printedClojure}
+```clojure
+0.7316666666666667
+
+```
+:::
+
+
+
+::: {.sourceClojure}
+```clojure
+(stats/cohens-kappa predictions actual)
+```
+:::
+
+
+
+::: {.printedClojure}
+```clojure
+-0.49999999999999994
+
+```
+:::
+
+
+
+::: {.sourceClojure}
+```clojure
+(stats/mcc predictions actual)
+```
+:::
+
+
+
+::: {.printedClojure}
+```clojure
+-0.5406932780138165
+
+```
+:::
+
+
+Woah! Something is wrong with the calculations. Let's see the datatypes:
+
+
+::: {.sourceClojure}
+```clojure
+(type (first predictions))
+```
+:::
+
+
+
+::: {.printedClojure}
+```clojure
+java.lang.Double
+
+```
+:::
+
+
+
+::: {.sourceClojure}
+```clojure
+(type (first actual))
+```
+:::
+
+
+
+::: {.printedClojure}
+```clojure
+java.lang.Long
+
+```
+:::
+
+
+One is a long type the other is a type double. These are not the same, which is why our kappa and mcc were so horribly low. Notice different datatypes' equivalencies and identities.
+
+
+::: {.sourceClojure}
+```clojure
+(= [1] `(1))
+```
+:::
+
+
+
+::: {.printedClojure}
+```clojure
+true
+
+```
+:::
+
+
+
+::: {.sourceClojure}
+```clojure
+(identical? [1] `(1))
+```
+:::
+
+
+
+::: {.printedClojure}
+```clojure
+false
+
+```
+:::
+
+
+Vectors `[]` are equivalent to lists ``()` (both in the sequence partition of Clojure.core), but not identical.
+
+
+::: {.sourceClojure}
+```clojure
+(= 1 1)
+```
+:::
+
+
+
+::: {.printedClojure}
+```clojure
+true
+
+```
+:::
+
+
+
+::: {.sourceClojure}
+```clojure
+(= 1 1.0)
+```
+:::
+
+
+
+::: {.printedClojure}
+```clojure
+false
+
+```
+:::
+
+
+
+::: {.sourceClojure}
+```clojure
+(identical? 1 1.0)
+```
+:::
+
+
+
+::: {.printedClojure}
+```clojure
+false
+
+```
+:::
+
+
+But long 1 and double 1 are neither equivalent nor identical.
+
+I will map each more precise type (double) to the less granular type (long) as to ensure we are calculating the stats properly.
+
+
+::: {.sourceClojure}
+```clojure
+(ml/classification-accuracy (vec (map #(long %) predictions)) actual)
+```
+:::
+
+
+
+::: {.printedClojure}
+```clojure
+0.7316666666666667
+
+```
+:::
+
+
+
+::: {.sourceClojure}
+```clojure
+(stats/cohens-kappa (vec (map #(long %) predictions)) actual)
+```
+:::
+
+
+
+::: {.printedClojure}
+```clojure
+0.5975
+
+```
+:::
+
+
+
+::: {.sourceClojure}
+```clojure
+(stats/mcc (vec (map #(long %) predictions)) actual)
+```
+:::
+
+
+
+::: {.printedClojure}
+```clojure
+0.6461284672265107
+
+```
+:::
+
+
+It's better, however, it is interesting to see that adding an additional predictor, `:x2`, we aren't getting a bump in performance based on kappa and mcc.
+
+<div style="background-color:grey;height:2px;width:100%;"></div>
+
+<div><pre><small><small>source: src/assignment/lda.clj</small></small></pre></div>
