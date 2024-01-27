@@ -5,7 +5,7 @@
 
 ;; # Generate Data
 (defn norm-dist [len]
-  (take len (dist/normal {:mu -4 :sd 4})))
+  (take len (dist/normal {:mu 0 :sd 4})))
 
 (defn make-normal-ds [len]
   {:x1    (take len (dist/normal {:mu 1 :sd 2 :location 3}))
@@ -25,7 +25,7 @@
 
 (defn make-log-normal-ds [len]
   {:x1    (take len (dist/normal {:mu 0 :sd 2 :location -1}))
-   :x2    (map #(* 2 %) (log-norm-dist len))
+   :x2    (map #(* -2 %) (log-norm-dist len))
    :group (take len (repeat "log-normal"))})
 
 (defn generate-data [len]

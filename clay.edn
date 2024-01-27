@@ -1,9 +1,12 @@
 {
  ;:remote-repo {:git-url "https://github.com/adabwana/linear-discriminate-analysis"
  ;              :branch "master"}
- :quarto {:format {:html {:toc true
-                          :toc-depth 4}}
-          ;:highlight-style :nord
+ :quarto {:format                {:html {:toc             true
+                                         :toc-depth       4
+                                         :theme           {:light "yeti"
+                                                           :dark  "cyborg"}
+                                         :number-sections false}}
+          ;:highlight-style       :nord
           :code-block-background true
-          ;:base-target-path "temp" ;what it do?
-          :include-in-header {:text "<link rel = \"icon\" href = \"data:,\" />"}}}
+          :base-target-path      "temp"                     ;what it do?
+          :include-in-header     {:text "<link rel = \"icon\" href = \"data:,\" />"}}}

@@ -1,12 +1,12 @@
 (ns assignment.lda
   (:require
     [assignment.generate-data :refer [data]]
-    [utils.helpful-extracts :refer [model->ds eval-maps]]
     [calc-metric.patch]
     [fastmath.stats :as stats]
     [scicloj.ml.core :as ml]
     [scicloj.ml.dataset :as ds]
-    [scicloj.ml.metamorph :as mm]))
+    [scicloj.ml.metamorph :as mm]
+    [utils.helpful-extracts :refer [eval-maps model->ds]]))
 
 ;; # Linear Discriminate Analysis
 (comment                                                    ;if testing binary response
@@ -88,10 +88,10 @@
 (-> models second :other-metrices
     (->> (map #(select-keys % [:name :metric]))))
 
-(-> models first :fit-ctx second) ;look for :fit-ctx second has StdScaleTransform
+(-> models first :fit-ctx second)                           ;look for :fit-ctx second has StdScaleTransform
 
 (-> (model->ds (eval-maps models 2))
-    (ds/rename-columns {:metric-1 :kappa ;TODO: extract from models
+    (ds/rename-columns {:metric-1 :kappa                    ;TODO: extract from models
                         :metric-2 :accuracy
                         :metric-3 :mathews-cor-coef}))
 

@@ -11,6 +11,7 @@
      :source-path      ["index.clj"                          ;index.md
                         "assignment/generate_data.clj"
                         "assignment/visualize_data.clj"
+                        "assignment/lda_univariate.clj"
                         "assignment/lda.clj"
                         "assignment/r_interop.clj"]}))
 

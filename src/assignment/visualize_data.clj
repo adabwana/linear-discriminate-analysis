@@ -2,6 +2,7 @@
   (:require
     [aerial.hanami.templates :as ht]
     [assignment.generate-data :refer [data]]
+    [scicloj.kindly.v4.kind :as kind]
     [scicloj.ml.dataset :as ds]
     [scicloj.noj.v1.vis.hanami :as hanami]))
 
@@ -41,3 +42,11 @@
 (-> data
     (hanami/plot ht/point-chart
                  {:X "x1" :Y "x2" :COLOR "group"}))
+
+^kind/vega
+(let [data (ds/rows data :as-maps)]
+  {:data     {:values data}
+   :mark     "bar"
+   :encoding {:x {:field :x1 :bin true :type "quantitative"}
+              :y {:aggregate "count"}
+              :color {:field :group}}})
