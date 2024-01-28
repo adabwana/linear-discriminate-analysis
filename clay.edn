@@ -1,5 +1,4 @@
-{
- :remote-repo {:git-url "https://github.com/adabwana/linear-discriminate-analysis"
+{:remote-repo {:git-url "https://github.com/adabwana/linear-discriminate-analysis"
                :branch "master"}
  :quarto {:format
           {:html {:theme     {:dark  "cyborg"

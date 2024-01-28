@@ -14,5 +14,3 @@
            {:extra-paths ["dev" "notebooks" "env/dev/src" "test"]
             :extra-deps {com.fzakaria/slf4j-timbre   {:mvn/version "0.4.1"}
                          org.scicloj/clay            {:mvn/version "2-alpha63"}}}}}
-
-

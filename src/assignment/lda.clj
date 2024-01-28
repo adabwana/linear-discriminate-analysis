@@ -163,8 +163,35 @@
 ;
 ; I will map each more precise type (double) to the less granular type (long) as to ensure we are calculating the stats properly.
 
-(ml/classification-accuracy (vec (map #(long %) predictions)) actual)
-(stats/cohens-kappa (vec (map #(long %) predictions)) actual)
-(stats/mcc (vec (map #(long %) predictions)) actual)
+(def predictions
+  (vec (map #(long %) predictions)))
+
+(ml/classification-accuracy predictions actual)
+(stats/cohens-kappa predictions actual)
+(stats/mcc predictions actual)
 
 ; It's better, however, it is interesting to see that adding an additional predictor, `:x2`, we aren't getting a bump in performance based on kappa and mcc.
+;
+;I want to see if it has anything to do with the fact that these categories are still coded numerically.
+
+(def lookup-table
+  (-> models second :fit-ctx :model
+      :target-categorical-maps :group :lookup-table))
+
+(def lookup-table-invert
+  (clojure.set/map-invert lookup-table))
+
+(def lda-predict
+  (->> predictions
+      (map #(get lookup-table-invert %))
+      vec))
+
+(peek lda-predict)
+
+; Now we have predictions labeled with their respective string values. Let's see how they compare to our original data `:groups`.
+
+(ml/classification-accuracy lda-predict (:group data))
+(stats/cohens-kappa lda-predict (:group data))
+(stats/mcc lda-predict (:group data))
+
+; Still the same. Interesting the predicted being weaker with the additional variable. My guess is because of the numbers. Here, we tested on the full data, where in the univariate LDA, we tested on 20% of that data, having higher variability of good or poor metrics (apparently, we go the good side in this assignment).
