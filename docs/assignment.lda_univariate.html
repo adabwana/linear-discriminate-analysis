@@ -305,20 +305,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td>normal</td>
-<td style="text-align: right;">2.91548469</td>
-<td style="text-align: right;">3.99427481</td>
+<td style="text-align: right;">3.17443507</td>
+<td style="text-align: right;">3.91103088</td>
 <td>0.3271</td>
 </tr>
 <tr class="even">
 <td>log-normal</td>
-<td style="text-align: right;">-0.99709851</td>
-<td style="text-align: right;">3.99427481</td>
+<td style="text-align: right;">-0.94902020</td>
+<td style="text-align: right;">3.91103088</td>
 <td>0.3479</td>
 </tr>
 <tr class="odd">
 <td>gamma</td>
-<td style="text-align: right;">7.15330619</td>
-<td style="text-align: right;">3.99427481</td>
+<td style="text-align: right;">7.18921057</td>
+<td style="text-align: right;">3.91103088</td>
 <td>0.3250</td>
 </tr>
 </tbody>
@@ -375,20 +375,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td>normal</td>
-<td style="text-align: right;">2.91548469</td>
-<td style="text-align: right;">3.99427481</td>
+<td style="text-align: right;">3.17443507</td>
+<td style="text-align: right;">3.91103088</td>
 <td>0.3271</td>
 </tr>
 <tr class="even">
 <td>log-normal</td>
-<td style="text-align: right;">-0.99709851</td>
-<td style="text-align: right;">3.99427481</td>
+<td style="text-align: right;">-0.94902020</td>
+<td style="text-align: right;">3.91103088</td>
 <td>0.3479</td>
 </tr>
 <tr class="odd">
 <td>gamma</td>
-<td style="text-align: right;">7.15330619</td>
-<td style="text-align: right;">3.99427481</td>
+<td style="text-align: right;">7.18921057</td>
+<td style="text-align: right;">3.91103088</td>
 <td>0.3250</td>
 </tr>
 </tbody>
@@ -474,15 +474,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="odd">
 <td>log-normal</td>
-<td>1</td>
-<td>142</td>
-<td>24</td>
+<td>0.000</td>
+<td>141</td>
+<td>26</td>
 </tr>
 <tr class="even">
 <td>normal</td>
-<td>20</td>
-<td>20</td>
-<td>117</td>
+<td>25</td>
+<td>22</td>
+<td>110</td>
 </tr>
 </tbody>
 </table>
@@ -491,19 +491,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode" id="cb15"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>(ml/classification-accuracy pred-train actual-train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb16"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fl">0.8208333333333333</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fl">0.8041666666666667</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="sourceClojure">
 <div class="sourceCode" id="cb17"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>(stats/cohens-kappa pred-train actual-train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb18"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fl">0.7312080012501954</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fl">0.7061926157452628</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="sourceClojure">
 <div class="sourceCode" id="cb19"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>(stats/mcc pred-train actual-train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb20"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fl">0.731327060640201</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fl">0.7062662112546088</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="test" class="level3" data-number="4.5.2">
@@ -546,14 +546,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>log-normal</td>
 <td>0.000</td>
-<td>26</td>
-<td>7</td>
+<td>29</td>
+<td>4</td>
 </tr>
 <tr class="even">
 <td>normal</td>
+<td>5</td>
 <td>6</td>
-<td>6</td>
-<td>31</td>
+<td>32</td>
 </tr>
 </tbody>
 </table>
@@ -561,19 +561,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode" id="cb24"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>(ml/classification-accuracy pred-test actual-test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb25"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fl">0.75</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fl">0.7833333333333333</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="sourceClojure">
 <div class="sourceCode" id="cb26"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>(stats/cohens-kappa pred-test actual-test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb27"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fl">0.621888457094843</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fl">0.6733668341708543</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="sourceClojure">
 <div class="sourceCode" id="cb28"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>(stats/mcc pred-test actual-test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb29"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fl">0.6239244049747774</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fl">0.6753465079609335</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Performance on test is less than training. This is not unexpected, in fact it’s quite common. Test data statistic <em>may</em> be better than the training data in cases where 1) the data is rather normal (no outliers), 2) the model is most appropriate to the data (e.g.&nbsp;a linear relation is modeled linearly) and/or 3) data size is small allowing for higher variation of these statistics.</p>
 <p>As for this model, having Cohen’s Kappa and Mathews Correlation Coefficient greater than .6 is encouraging if only because, if you recall our :x1 distributions by group (final plot in our “Visualize Data” section), there is heavy overlap between our three groups.</p>
@@ -581,7 +581,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </div>
 <div>
-<pre><small><small>source: src/assignment/lda_univariate.clj</small></small></pre>
+<pre><small><small>source: <a href="https://github.com/adabwana/linear-discriminate-analysis/blob/master/src/assignment/lda_univariate.clj">src/assignment/lda_univariate.clj</a></small></small></pre>
 </div>
 
 

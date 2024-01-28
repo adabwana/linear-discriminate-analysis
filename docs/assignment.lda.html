@@ -329,34 +329,34 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">0.03770042</td>
-<td style="text-align: right;">0.28809817</td>
-<td style="text-align: right;">0.67420141</td>
+<td style="text-align: right;">0.03088574</td>
+<td style="text-align: right;">0.19141317</td>
+<td style="text-align: right;">0.77770108</td>
 <td style="text-align: right;">2.0</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">0.11867611</td>
-<td style="text-align: right;">0.37145780</td>
-<td style="text-align: right;">0.50986609</td>
+<td style="text-align: right;">0.08256977</td>
+<td style="text-align: right;">0.28728216</td>
+<td style="text-align: right;">0.63014807</td>
 <td style="text-align: right;">2.0</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;">0.10155604</td>
-<td style="text-align: right;">0.34730272</td>
-<td style="text-align: right;">0.55114124</td>
-<td style="text-align: right;">2.0</td>
+<td style="text-align: right;">0.66053978</td>
+<td style="text-align: right;">0.28541597</td>
+<td style="text-align: right;">0.05404425</td>
+<td style="text-align: right;">0.0</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">0.13355578</td>
-<td style="text-align: right;">0.43690179</td>
-<td style="text-align: right;">0.42954243</td>
+<td style="text-align: right;">0.24198183</td>
+<td style="text-align: right;">0.55287144</td>
+<td style="text-align: right;">0.20514674</td>
 <td style="text-align: right;">1.0</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;">0.46773398</td>
-<td style="text-align: right;">0.37908415</td>
-<td style="text-align: right;">0.15318188</td>
-<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.04956847</td>
+<td style="text-align: right;">0.31746044</td>
+<td style="text-align: right;">0.63297109</td>
+<td style="text-align: right;">2.0</td>
 </tr>
 </tbody>
 </table>
@@ -415,41 +415,41 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode" id="cb17"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> models <span class="kw">first</span> <span class="at">:metric</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb18"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fl">0.9078947368421054</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fl">0.9018734442552077</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="sourceClojure">
 <div class="sourceCode" id="cb19"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> models <span class="kw">first</span> <span class="at">:other-metrices</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    (<span class="kw">-&gt;&gt;</span> (<span class="kw">map</span> #(<span class="kw">select-keys</span> <span class="va">%</span> [<span class="at">:name</span> <span class="at">:metric</span>]))))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb20"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>({<span class="at">:name</span> <span class="at">:accuracy</span>, <span class="at">:metric</span> <span class="fl">0.9391304347826087</span>}</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a> {<span class="at">:name</span> <span class="at">:mathews-cor-coef</span>, <span class="at">:metric</span> <span class="fl">0.9079986283313578</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>({<span class="at">:name</span> <span class="at">:accuracy</span>, <span class="at">:metric</span> <span class="fl">0.9345794392523364</span>}</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a> {<span class="at">:name</span> <span class="at">:mathews-cor-coef</span>, <span class="at">:metric</span> <span class="fl">0.9027015644752848</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="sourceClojure">
 <div class="sourceCode" id="cb21"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> models <span class="kw">second</span> <span class="at">:metric</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb22"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fl">0.9078947368421054</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fl">0.9018734442552077</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="sourceClojure">
 <div class="sourceCode" id="cb23"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> models <span class="kw">second</span> <span class="at">:other-metrices</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    (<span class="kw">-&gt;&gt;</span> (<span class="kw">map</span> #(<span class="kw">select-keys</span> <span class="va">%</span> [<span class="at">:name</span> <span class="at">:metric</span>]))))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb24"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>({<span class="at">:name</span> <span class="at">:accuracy</span>, <span class="at">:metric</span> <span class="fl">0.9391304347826087</span>}</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a> {<span class="at">:name</span> <span class="at">:mathews-cor-coef</span>, <span class="at">:metric</span> <span class="fl">0.9079986283313578</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>({<span class="at">:name</span> <span class="at">:accuracy</span>, <span class="at">:metric</span> <span class="fl">0.9345794392523364</span>}</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a> {<span class="at">:name</span> <span class="at">:mathews-cor-coef</span>, <span class="at">:metric</span> <span class="fl">0.9027015644752848</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Two models with exactly the same statistics. Meaning in this particular case, scaling and normalizing our data was not required for an improvement in the classification of groups.</p>
 <div class="sourceClojure">
 <div class="sourceCode" id="cb25"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> models <span class="kw">first</span> <span class="at">:fit-ctx</span> <span class="kw">second</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb26"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>[#uuid <span class="st">"9765cda3-cf0e-4e34-9db4-ce9cfbf2f3ce"</span></span>
+<div class="sourceCode" id="cb26"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>[#uuid <span class="st">"3c689c6c-0e6f-46d8-8e97-faa192819922"</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a> {<span class="at">:fit-std-xform</span></span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  {<span class="at">:x1</span></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>   {<span class="at">:mean</span> <span class="fl">3.174954238927112</span>, <span class="at">:standard-deviation</span> <span class="fl">3.772311140104022</span>},</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>   {<span class="at">:mean</span> <span class="fl">3.0724771412482723</span>, <span class="at">:standard-deviation</span> <span class="fl">3.7718629995876034</span>},</span>
 <span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>   <span class="at">:x2</span></span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>   {<span class="at">:mean</span> <span class="fl">0.5409722477186786</span>, <span class="at">:standard-deviation</span> <span class="fl">6.86250404733226</span>}}}]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>   {<span class="at">:mean</span> <span class="fl">0.05383571673872441</span>, <span class="at">:standard-deviation</span> <span class="fl">6.804812311672842</span>}}}]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>look for :fit-ctx second has StdScaleTransform Notice in our first model’s <code>:fit-ctx</code> we have a <code>:fit-std-xform</code>. That means this is our standardized pipeline. Might be interesting to keep this in mind for the next table.</p>
 <div class="sourceClojure">
@@ -479,17 +479,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td>:smile.classification/linear-discriminant-analysis</td>
-<td style="text-align: right;">876180</td>
-<td style="text-align: right;">0.90789474</td>
-<td style="text-align: right;">0.93913043</td>
-<td style="text-align: right;">0.90799863</td>
+<td style="text-align: right;">22704584</td>
+<td style="text-align: right;">0.90187344</td>
+<td style="text-align: right;">0.93457944</td>
+<td style="text-align: right;">0.90270156</td>
 </tr>
 <tr class="even">
 <td>:smile.classification/linear-discriminant-analysis</td>
-<td style="text-align: right;">1246725</td>
-<td style="text-align: right;">0.90789474</td>
-<td style="text-align: right;">0.93913043</td>
-<td style="text-align: right;">0.90799863</td>
+<td style="text-align: right;">10257939</td>
+<td style="text-align: right;">0.90187344</td>
+<td style="text-align: right;">0.93457944</td>
+<td style="text-align: right;">0.90270156</td>
 </tr>
 </tbody>
 </table>
@@ -541,15 +541,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="even">
 <td>0</td>
-<td>188</td>
-<td>12</td>
+<td>185</td>
+<td>15</td>
 <td>0.000</td>
 </tr>
 <tr class="odd">
 <td>1</td>
-<td>23</td>
-<td>51</td>
-<td>126</td>
+<td>15</td>
+<td>75</td>
+<td>110</td>
 </tr>
 <tr class="even">
 <td>2</td>
@@ -570,7 +570,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode" id="cb33"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>(ml/classification-accuracy predictions actual)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb34"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fl">0.7316666666666667</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fl">0.7666666666666667</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="sourceClojure">
 <div class="sourceCode" id="cb35"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>(stats/cohens-kappa predictions actual)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -582,7 +582,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode" id="cb37"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>(stats/mcc predictions actual)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb38"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>-<span class="fl">0.5406932780138165</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>-<span class="fl">0.5272904491779212</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Woah! Something is wrong with the calculations. Let’s see the datatypes:</p>
 <div class="sourceClojure">
@@ -632,29 +632,75 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>But long 1 and double 1 are neither equivalent nor identical.</p>
 <p>I will map each more precise type (double) to the less granular type (long) as to ensure we are calculating the stats properly.</p>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb53"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>(ml/classification-accuracy (<span class="kw">vec</span> (<span class="kw">map</span> #(<span class="kw">long</span> <span class="va">%</span>) predictions)) actual)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="printedClojure">
-<div class="sourceCode" id="cb54"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fl">0.7316666666666667</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>(<span class="bu">def</span><span class="fu"> predictions</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>  (<span class="kw">vec</span> (<span class="kw">map</span> #(<span class="kw">long</span> <span class="va">%</span>) predictions)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb55"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>(stats/cohens-kappa (<span class="kw">vec</span> (<span class="kw">map</span> #(<span class="kw">long</span> <span class="va">%</span>) predictions)) actual)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>(ml/classification-accuracy predictions actual)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb56"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fl">0.5975</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fl">0.7666666666666667</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb57"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>(stats/mcc (<span class="kw">vec</span> (<span class="kw">map</span> #(<span class="kw">long</span> <span class="va">%</span>) predictions)) actual)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>(stats/cohens-kappa predictions actual)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb58"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fl">0.6461284672265107</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fl">0.65</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="sourceClojure">
+<div class="sourceCode" id="cb58"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>(stats/mcc predictions actual)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="printedClojure">
+<div class="sourceCode" id="cb59"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fl">0.6854775839312975</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>It’s better, however, it is interesting to see that adding an additional predictor, <code>:x2</code>, we aren’t getting a bump in performance based on kappa and mcc.</p>
+<p>I want to see if it has anything to do with the fact that these categories are still coded numerically.</p>
+<div class="sourceClojure">
+<div class="sourceCode" id="cb60"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>(<span class="bu">def</span><span class="fu"> lookup-table</span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>  (<span class="kw">-&gt;</span> models <span class="kw">second</span> <span class="at">:fit-ctx</span> <span class="at">:model</span></span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>      <span class="at">:target-categorical-maps</span> <span class="at">:group</span> <span class="at">:lookup-table</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="sourceClojure">
+<div class="sourceCode" id="cb61"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>(<span class="bu">def</span><span class="fu"> lookup-table-invert</span></span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>  (clojure.set/map-invert lookup-table))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="sourceClojure">
+<div class="sourceCode" id="cb62"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>(<span class="bu">def</span><span class="fu"> lda-predict</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>  (<span class="kw">-&gt;&gt;</span> predictions</span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>      (<span class="kw">map</span> #(<span class="kw">get</span> lookup-table-invert <span class="va">%</span>))</span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>      <span class="kw">vec</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="sourceClojure">
+<div class="sourceCode" id="cb63"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">peek</span> lda-predict)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="printedClojure">
+<div class="sourceCode" id="cb64"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="st">"log-normal"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we have predictions labeled with their respective string values. Let’s see how they compare to our original data <code>:groups</code>.</p>
+<div class="sourceClojure">
+<div class="sourceCode" id="cb65"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>(ml/classification-accuracy lda-predict (<span class="at">:group</span> data))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="printedClojure">
+<div class="sourceCode" id="cb66"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fl">0.7666666666666667</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="sourceClojure">
+<div class="sourceCode" id="cb67"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>(stats/cohens-kappa lda-predict (<span class="at">:group</span> data))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="printedClojure">
+<div class="sourceCode" id="cb68"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="fl">0.65</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="sourceClojure">
+<div class="sourceCode" id="cb69"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>(stats/mcc lda-predict (<span class="at">:group</span> data))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="printedClojure">
+<div class="sourceCode" id="cb70"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="fl">0.6854775839312975</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Still the same. Interesting the predicted being weaker with the additional variable. My guess is because of the numbers. Here, we tested on the full data, where in the univariate LDA, we tested on 20% of that data, having higher variability of good or poor metrics (apparently, we go the good side in this assignment).</p>
 <div style="background-color:grey;height:2px;width:100%;">
 
 </div>
 <div>
-<pre><small><small>source: src/assignment/lda.clj</small></small></pre>
+<pre><small><small>source: <a href="https://github.com/adabwana/linear-discriminate-analysis/blob/master/src/assignment/lda.clj">src/assignment/lda.clj</a></small></small></pre>
 </div>
 
 

@@ -122,4 +122,4 @@ include-in-header: {text: '<link rel = "icon" href = "data:," />'}
 
 <div style="background-color:grey;height:2px;width:100%;"></div>
 
-<div><pre><small><small>source: src/assignment/generate_data.clj</small></small></pre></div>
+<div><pre><small><small>source: <a href="https://github.com/adabwana/linear-discriminate-analysis/blob/master/src/assignment/generate_data.clj">src/assignment/generate_data.clj</a></small></small></pre></div>

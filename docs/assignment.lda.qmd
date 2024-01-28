@@ -159,11 +159,11 @@ No hyperparameters.
 
 | log-normal |     normal |      gamma | :group |
 |-----------:|-----------:|-----------:|-------:|
-| 0.03770042 | 0.28809817 | 0.67420141 |    2.0 |
-| 0.11867611 | 0.37145780 | 0.50986609 |    2.0 |
-| 0.10155604 | 0.34730272 | 0.55114124 |    2.0 |
-| 0.13355578 | 0.43690179 | 0.42954243 |    1.0 |
-| 0.46773398 | 0.37908415 | 0.15318188 |    0.0 |
+| 0.03088574 | 0.19141317 | 0.77770108 |    2.0 |
+| 0.08256977 | 0.28728216 | 0.63014807 |    2.0 |
+| 0.66053978 | 0.28541597 | 0.05404425 |    0.0 |
+| 0.24198183 | 0.55287144 | 0.20514674 |    1.0 |
+| 0.04956847 | 0.31746044 | 0.63297109 |    2.0 |
 
 
 
@@ -254,7 +254,7 @@ Clojure's default `:bootstrapping` process takes a `:repeats` argument that is e
 
 ::: {.printedClojure}
 ```clojure
-0.9078947368421054
+0.9018734442552077
 
 ```
 :::
@@ -272,8 +272,8 @@ Clojure's default `:bootstrapping` process takes a `:repeats` argument that is e
 
 ::: {.printedClojure}
 ```clojure
-({:name :accuracy, :metric 0.9391304347826087}
- {:name :mathews-cor-coef, :metric 0.9079986283313578})
+({:name :accuracy, :metric 0.9345794392523364}
+ {:name :mathews-cor-coef, :metric 0.9027015644752848})
 
 ```
 :::
@@ -290,7 +290,7 @@ Clojure's default `:bootstrapping` process takes a `:repeats` argument that is e
 
 ::: {.printedClojure}
 ```clojure
-0.9078947368421054
+0.9018734442552077
 
 ```
 :::
@@ -308,8 +308,8 @@ Clojure's default `:bootstrapping` process takes a `:repeats` argument that is e
 
 ::: {.printedClojure}
 ```clojure
-({:name :accuracy, :metric 0.9391304347826087}
- {:name :mathews-cor-coef, :metric 0.9079986283313578})
+({:name :accuracy, :metric 0.9345794392523364}
+ {:name :mathews-cor-coef, :metric 0.9027015644752848})
 
 ```
 :::
@@ -328,12 +328,12 @@ Two models with exactly the same statistics. Meaning in this particular case, sc
 
 ::: {.printedClojure}
 ```clojure
-[#uuid "9765cda3-cf0e-4e34-9db4-ce9cfbf2f3ce"
+[#uuid "3c689c6c-0e6f-46d8-8e97-faa192819922"
  {:fit-std-xform
   {:x1
-   {:mean 3.174954238927112, :standard-deviation 3.772311140104022},
+   {:mean 3.0724771412482723, :standard-deviation 3.7718629995876034},
    :x2
-   {:mean 0.5409722477186786, :standard-deviation 6.86250404733226}}}]
+   {:mean 0.05383571673872441, :standard-deviation 6.804812311672842}}}]
 
 ```
 :::
@@ -357,8 +357,8 @@ _unnamed [2 5]:
 
 |                                        :model-type | :compute-time-ns |     :kappa |  :accuracy | :mathews-cor-coef |
 |----------------------------------------------------|-----------------:|-----------:|-----------:|------------------:|
-| :smile.classification/linear-discriminant-analysis |           876180 | 0.90789474 | 0.93913043 |        0.90799863 |
-| :smile.classification/linear-discriminant-analysis |          1246725 | 0.90789474 | 0.93913043 |        0.90799863 |
+| :smile.classification/linear-discriminant-analysis |         22704584 | 0.90187344 | 0.93457944 |        0.90270156 |
+| :smile.classification/linear-discriminant-analysis |         10257939 | 0.90187344 | 0.93457944 |        0.90270156 |
 
 
 
@@ -412,8 +412,8 @@ _unnamed [4 4]:
 | :column-name |     0 |     1 |     2 |
 |--------------|-------|-------|-------|
 |  column-name |     0 |     1 |     2 |
-|            0 |   188 |    12 | 0.000 |
-|            1 |    23 |    51 |   126 |
+|            0 |   185 |    15 | 0.000 |
+|            1 |    15 |    75 |   110 |
 |            2 | 0.000 | 0.000 |   200 |
 
 
@@ -447,7 +447,7 @@ _unnamed [4 4]:
 
 ::: {.printedClojure}
 ```clojure
-0.7316666666666667
+0.7666666666666667
 
 ```
 :::
@@ -481,7 +481,7 @@ _unnamed [4 4]:
 
 ::: {.printedClojure}
 ```clojure
--0.5406932780138165
+-0.5272904491779212
 
 ```
 :::
@@ -619,7 +619,16 @@ I will map each more precise type (double) to the less granular type (long) as t
 
 ::: {.sourceClojure}
 ```clojure
-(ml/classification-accuracy (vec (map #(long %) predictions)) actual)
+(def predictions
+  (vec (map #(long %) predictions)))
+```
+:::
+
+
+
+::: {.sourceClojure}
+```clojure
+(ml/classification-accuracy predictions actual)
 ```
 :::
 
@@ -627,7 +636,7 @@ I will map each more precise type (double) to the less granular type (long) as t
 
 ::: {.printedClojure}
 ```clojure
-0.7316666666666667
+0.7666666666666667
 
 ```
 :::
@@ -636,7 +645,7 @@ I will map each more precise type (double) to the less granular type (long) as t
 
 ::: {.sourceClojure}
 ```clojure
-(stats/cohens-kappa (vec (map #(long %) predictions)) actual)
+(stats/cohens-kappa predictions actual)
 ```
 :::
 
@@ -644,7 +653,7 @@ I will map each more precise type (double) to the less granular type (long) as t
 
 ::: {.printedClojure}
 ```clojure
-0.5975
+0.65
 
 ```
 :::
@@ -653,7 +662,7 @@ I will map each more precise type (double) to the less granular type (long) as t
 
 ::: {.sourceClojure}
 ```clojure
-(stats/mcc (vec (map #(long %) predictions)) actual)
+(stats/mcc predictions actual)
 ```
 :::
 
@@ -661,7 +670,7 @@ I will map each more precise type (double) to the less granular type (long) as t
 
 ::: {.printedClojure}
 ```clojure
-0.6461284672265107
+0.6854775839312975
 
 ```
 :::
@@ -669,6 +678,110 @@ I will map each more precise type (double) to the less granular type (long) as t
 
 It's better, however, it is interesting to see that adding an additional predictor, `:x2`, we aren't getting a bump in performance based on kappa and mcc.
 
+I want to see if it has anything to do with the fact that these categories are still coded numerically.
+
+
+::: {.sourceClojure}
+```clojure
+(def lookup-table
+  (-> models second :fit-ctx :model
+      :target-categorical-maps :group :lookup-table))
+```
+:::
+
+
+
+::: {.sourceClojure}
+```clojure
+(def lookup-table-invert
+  (clojure.set/map-invert lookup-table))
+```
+:::
+
+
+
+::: {.sourceClojure}
+```clojure
+(def lda-predict
+  (->> predictions
+      (map #(get lookup-table-invert %))
+      vec))
+```
+:::
+
+
+
+::: {.sourceClojure}
+```clojure
+(peek lda-predict)
+```
+:::
+
+
+
+::: {.printedClojure}
+```clojure
+"log-normal"
+
+```
+:::
+
+
+Now we have predictions labeled with their respective string values. Let's see how they compare to our original data `:groups`.
+
+
+::: {.sourceClojure}
+```clojure
+(ml/classification-accuracy lda-predict (:group data))
+```
+:::
+
+
+
+::: {.printedClojure}
+```clojure
+0.7666666666666667
+
+```
+:::
+
+
+
+::: {.sourceClojure}
+```clojure
+(stats/cohens-kappa lda-predict (:group data))
+```
+:::
+
+
+
+::: {.printedClojure}
+```clojure
+0.65
+
+```
+:::
+
+
+
+::: {.sourceClojure}
+```clojure
+(stats/mcc lda-predict (:group data))
+```
+:::
+
+
+
+::: {.printedClojure}
+```clojure
+0.6854775839312975
+
+```
+:::
+
+
+Still the same. Interesting the predicted being weaker with the additional variable. My guess is because of the numbers. Here, we tested on the full data, where in the univariate LDA, we tested on 20% of that data, having higher variability of good or poor metrics (apparently, we go the good side in this assignment).
+
 <div style="background-color:grey;height:2px;width:100%;"></div>
 
-<div><pre><small><small>source: src/assignment/lda.clj</small></small></pre></div>
+<div><pre><small><small>source: <a href="https://github.com/adabwana/linear-discriminate-analysis/blob/master/src/assignment/lda.clj">src/assignment/lda.clj</a></small></small></pre></div>

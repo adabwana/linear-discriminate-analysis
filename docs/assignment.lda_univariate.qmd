@@ -112,9 +112,9 @@ _unnamed [3 4]:
 
 |     :group |       :mean | :pooled-variance | :prior-prob |
 |------------|------------:|-----------------:|-------------|
-|     normal |  2.91548469 |       3.99427481 |      0.3271 |
-| log-normal | -0.99709851 |       3.99427481 |      0.3479 |
-|      gamma |  7.15330619 |       3.99427481 |      0.3250 |
+|     normal |  3.17443507 |       3.91103088 |      0.3271 |
+| log-normal | -0.94902020 |       3.91103088 |      0.3479 |
+|      gamma |  7.18921057 |       3.91103088 |      0.3250 |
 
 
 
@@ -176,9 +176,9 @@ _unnamed [3 4]:
 
 |     :group |       :mean | :pooled-variance | :prior-prob |
 |------------|------------:|-----------------:|-------------|
-|     normal |  2.91548469 |       3.99427481 |      0.3271 |
-| log-normal | -0.99709851 |       3.99427481 |      0.3479 |
-|      gamma |  7.15330619 |       3.99427481 |      0.3250 |
+|     normal |  3.17443507 |       3.91103088 |      0.3271 |
+| log-normal | -0.94902020 |       3.91103088 |      0.3479 |
+|      gamma |  7.18921057 |       3.91103088 |      0.3250 |
 
 
 
@@ -244,8 +244,8 @@ _unnamed [4 4]:
 |--------------|-------|------------|--------|
 |  column-name | gamma | log-normal | normal |
 |        gamma |   135 |      0.000 |     21 |
-|   log-normal |     1 |        142 |     24 |
-|       normal |    20 |         20 |    117 |
+|   log-normal | 0.000 |        141 |     26 |
+|       normal |    25 |         22 |    110 |
 
 
 
@@ -262,7 +262,7 @@ Confusion matrices made in Clojure's machine learning library (scicloj) accordin
 
 ::: {.printedClojure}
 ```clojure
-0.8208333333333333
+0.8041666666666667
 
 ```
 :::
@@ -279,7 +279,7 @@ Confusion matrices made in Clojure's machine learning library (scicloj) accordin
 
 ::: {.printedClojure}
 ```clojure
-0.7312080012501954
+0.7061926157452628
 
 ```
 :::
@@ -296,7 +296,7 @@ Confusion matrices made in Clojure's machine learning library (scicloj) accordin
 
 ::: {.printedClojure}
 ```clojure
-0.731327060640201
+0.7062662112546088
 
 ```
 :::
@@ -338,8 +338,8 @@ _unnamed [4 4]:
 |--------------|-------|------------|--------|
 |  column-name | gamma | log-normal | normal |
 |        gamma |    33 |      0.000 |     11 |
-|   log-normal | 0.000 |         26 |      7 |
-|       normal |     6 |          6 |     31 |
+|   log-normal | 0.000 |         29 |      4 |
+|       normal |     5 |          6 |     32 |
 
 
 
@@ -354,7 +354,7 @@ _unnamed [4 4]:
 
 ::: {.printedClojure}
 ```clojure
-0.75
+0.7833333333333333
 
 ```
 :::
@@ -371,7 +371,7 @@ _unnamed [4 4]:
 
 ::: {.printedClojure}
 ```clojure
-0.621888457094843
+0.6733668341708543
 
 ```
 :::
@@ -388,7 +388,7 @@ _unnamed [4 4]:
 
 ::: {.printedClojure}
 ```clojure
-0.6239244049747774
+0.6753465079609335
 
 ```
 :::
@@ -400,4 +400,4 @@ As for this model, having Cohen's Kappa and Mathews Correlation Coefficient grea
 
 <div style="background-color:grey;height:2px;width:100%;"></div>
 
-<div><pre><small><small>source: src/assignment/lda_univariate.clj</small></small></pre></div>
+<div><pre><small><small>source: <a href="https://github.com/adabwana/linear-discriminate-analysis/blob/master/src/assignment/lda_univariate.clj">src/assignment/lda_univariate.clj</a></small></small></pre></div>
